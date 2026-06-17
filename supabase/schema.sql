@@ -158,19 +158,29 @@ alter table team_members enable row level security;
 alter table activity_entries enable row level security;
 
 -- Public reads only
+drop policy if exists "Public read projects" on projects;
 create policy "Public read projects" on projects for select using (true);
+
+drop policy if exists "Public read config" on business_config;
 create policy "Public read config" on business_config for select using (true);
+
+drop policy if exists "Public read team" on team_members;
 create policy "Public read team" on team_members for select using (true);
+
+drop policy if exists "Public read activity" on activity_entries;
 create policy "Public read activity" on activity_entries for select using (true);
 
 -- NO anon write policies. Writes require service_role key (server-side only).
 
 -- Storage: public read, no anon writes
+drop policy if exists "Public read portfolio-images" on storage.objects;
 create policy "Public read portfolio-images"
   on storage.objects for select using (bucket_id = 'portfolio-images');
 
+drop policy if exists "Public read documents" on storage.objects;
 create policy "Public read documents"
   on storage.objects for select using (bucket_id = 'documents');
 
+drop policy if exists "Public read team-photos" on storage.objects;
 create policy "Public read team-photos"
   on storage.objects for select using (bucket_id = 'team-photos');
