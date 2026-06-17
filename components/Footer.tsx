@@ -70,6 +70,11 @@ export default function Footer() {
                   Resume / CV
                 </Link>
               </li>
+              <li>
+                <Link href="/work-with-us" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
+                  Work With Us
+                </Link>
+              </li>
             </ul>
           </div>
 
