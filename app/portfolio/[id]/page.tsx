@@ -7,8 +7,9 @@ import { ArrowLeft, GitBranch, ExternalLink, CheckCircle, Shield, Calendar, User
 
 export const dynamic = "force-dynamic";
 
-export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
-  const project = await fetchProjectById(params.id);
+export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const project = await fetchProjectById(resolvedParams.id);
   if (!project) notFound();
 
   return (
