@@ -13,6 +13,7 @@ const navLinks = [
   { label: "Deliverables", href: "/deliverables" },
   { label: "Activity", href: "/activity" },
   { label: "About", href: "/about" },
+  { label: "Work With Us", href: "/work-with-us" },
   { label: "Business Info", href: "/business-info" },
 ];
 

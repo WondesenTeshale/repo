@@ -339,7 +339,7 @@ export default function WorkWithUsPage() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     {/* GitHub */}
                     <div>
-                      <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block font-semibold font-mono">GitHub Profile</label>
+                      <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block font-semibold font-mono">GitHub Profile (Optional)</label>
                       <input 
                         type="url" 
                         value={formData.githubProfile} 
@@ -351,7 +351,7 @@ export default function WorkWithUsPage() {
 
                     {/* Portfolio */}
                     <div>
-                      <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block font-semibold">Portfolio Website</label>
+                      <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block font-semibold">Portfolio Website (Optional)</label>
                       <input 
                         type="url" 
                         value={formData.portfolioWebsite} 
