@@ -82,6 +82,16 @@ export interface StorageFile {
   bucket: string;
 }
 
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  status: "unread" | "read" | "archived";
+  createdAt: string;
+}
+
 export const INITIAL_CONFIG: BusinessConfig = {
   ...LOCKED_IDENTITY,
   email: "contact@betterdose.website",
@@ -183,6 +193,19 @@ export function rowToActivity(row: any): ActivityEntry {
     dateLabel: row.date_label ?? "",
     tech: row.tech ?? [],
     status: row.status ?? "",
+    createdAt: row.created_at,
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function rowToContactMessage(row: any): ContactMessage {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    subject: row.subject ?? "",
+    message: row.message,
+    status: row.status ?? "unread",
     createdAt: row.created_at,
   };
 }
@@ -362,6 +385,51 @@ export async function apiListFiles(
   const res = await fetch(`/api/upload?bucket=${bucket}`);
   if (!res.ok) return [];
   return res.json();
+}
+
+export async function apiSubmitContactMessage(
+  msg: Omit<ContactMessage, "id" | "status" | "createdAt">
+): Promise<ContactMessage | null> {
+  const res = await fetch("/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(msg),
+  });
+  if (!res.ok) { console.error("apiSubmitContactMessage:", await res.text()); return null; }
+  return rowToContactMessage(await res.json());
+}
+
+export async function apiFetchContactMessages(token: string): Promise<ContactMessage[]> {
+  const res = await fetch("/api/contact", {
+    method: "GET",
+    headers: adminHeaders(token),
+  });
+  if (!res.ok) { console.error("apiFetchContactMessages:", await res.text()); return []; }
+  const data = await res.json();
+  return (data ?? []).map(rowToContactMessage);
+}
+
+export async function apiDeleteContactMessage(id: string, token: string): Promise<boolean> {
+  const res = await fetch("/api/contact", {
+    method: "DELETE",
+    headers: adminHeaders(token),
+    body: JSON.stringify({ id }),
+  });
+  return res.ok;
+}
+
+export async function apiUpdateMessageStatus(
+  id: string,
+  status: "unread" | "read" | "archived",
+  token: string
+): Promise<ContactMessage | null> {
+  const res = await fetch("/api/contact", {
+    method: "PATCH",
+    headers: adminHeaders(token),
+    body: JSON.stringify({ id, status }),
+  });
+  if (!res.ok) { console.error("apiUpdateMessageStatus:", await res.text()); return null; }
+  return rowToContactMessage(await res.json());
 }
 
 // ─── Scaffold helpers ─────────────────────────────────────────

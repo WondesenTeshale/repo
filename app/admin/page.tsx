@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Settings } from "lucide-react";
+import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Mail, Settings } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { fetchProjects, fetchConfig, fetchTeamMembers, fetchActivityEntries, HASHED_USER, HASHED_PASS, Project, BusinessConfig, TeamMember, ActivityEntry } from "@/lib/db";
@@ -9,19 +9,21 @@ import TeamTab from "./components/TeamTab";
 import ActivityTab from "./components/ActivityTab";
 import MediaTab from "./components/MediaTab";
 import SettingsTab from "./components/SettingsTab";
+import MessagesTab from "./components/MessagesTab";
 
 async function sha256(msg: string) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-type Tab = "projects" | "team" | "activity" | "media" | "settings";
+type Tab = "projects" | "team" | "activity" | "media" | "messages" | "settings";
 
 const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
   { key: "projects", label: "Projects", icon: <FolderGit size={14} /> },
   { key: "team", label: "Team", icon: <Users size={14} /> },
   { key: "activity", label: "Activity", icon: <Activity size={14} /> },
   { key: "media", label: "Media", icon: <HardDrive size={14} /> },
+  { key: "messages", label: "Messages", icon: <Mail size={14} /> },
   { key: "settings", label: "Settings", icon: <Settings size={14} /> },
 ];
 
@@ -129,6 +131,7 @@ export default function AdminPage() {
               {tab === "team" && <TeamTab members={members} token={token} onRefresh={loadAll} />}
               {tab === "activity" && <ActivityTab entries={entries} token={token} onRefresh={loadAll} />}
               {tab === "media" && <MediaTab token={token} />}
+              {tab === "messages" && <MessagesTab token={token} />}
               {tab === "settings" && config && <SettingsTab config={config} token={token} onRefresh={loadAll} />}
             </div>
           )}

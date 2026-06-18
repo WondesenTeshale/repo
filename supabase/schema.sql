@@ -184,3 +184,18 @@ create policy "Public read documents"
 drop policy if exists "Public read team-photos" on storage.objects;
 create policy "Public read team-photos"
   on storage.objects for select using (bucket_id = 'team-photos');
+
+-- ─────────────────────────────────────────
+-- CONTACT MESSAGES TABLE
+-- ─────────────────────────────────────────
+create table if not exists contact_messages (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  subject text default '',
+  message text not null,
+  status text default 'unread' check (status in ('unread', 'read', 'archived')),
+  created_at timestamptz default now()
+);
+
+alter table contact_messages enable row level security;
