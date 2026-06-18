@@ -56,6 +56,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/qa-testing" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
+                  QA Testing
+                </Link>
+              </li>
+              <li>
+                <Link href="/technologies" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
+                  Technologies
+                </Link>
+              </li>
+              <li>
                 <Link href="/portfolio" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
                   Project Portfolio
                 </Link>

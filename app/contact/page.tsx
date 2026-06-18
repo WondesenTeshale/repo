@@ -117,8 +117,10 @@ export default function ContactPage() {
                   {[
                     { label: "GitHub — Nebiyu M.", url: config.githubNebiyu },
                     { label: "GitHub — Eyob M.", url: config.githubEyob },
+                    { label: "GitHub — Abel T.", url: config.githubAbel },
                     { label: "LinkedIn — Nebiyu M.", url: config.linkedInNebiyu },
                     { label: "LinkedIn — Eyob M.", url: config.linkedInEyob },
+                    { label: "LinkedIn — Abel T.", url: config.linkedInAbel },
                   ].filter(l => l.url).map(link => (
                     <a 
                       key={link.label} 

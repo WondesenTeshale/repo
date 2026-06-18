@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   if (!checkAuth(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await req.json();
   // Strip any attempt to modify locked fields
-  const { email, phone, linkedin_nebiyu, github_nebiyu, linkedin_eyob, github_eyob } = body;
+  const { email, phone, linkedin_nebiyu, github_nebiyu, linkedin_eyob, github_eyob, linkedin_abel, github_abel } = body;
   const { error } = await supabaseAdmin.from("business_config").upsert({
     id: 1,
     email,
@@ -41,6 +41,8 @@ export async function POST(req: NextRequest) {
     github_nebiyu,
     linkedin_eyob,
     github_eyob,
+    linkedin_abel,
+    github_abel,
     updated_at: new Date().toISOString(),
   }, { onConflict: "id" });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

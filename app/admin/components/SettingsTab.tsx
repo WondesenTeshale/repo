@@ -58,6 +58,8 @@ export default function SettingsTab({ config, token, onRefresh }: Props) {
           ["GitHub — Nebiyu", "githubNebiyu"],
           ["LinkedIn — Eyob", "linkedInEyob"],
           ["GitHub — Eyob", "githubEyob"],
+          ["LinkedIn — Abel", "linkedInAbel"],
+          ["GitHub — Abel", "githubAbel"],
         ] as [string, keyof BusinessConfig][]).map(([label, key]) => (
           <div key={key}>
             <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block">{label}</label>

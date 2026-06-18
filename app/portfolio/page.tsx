@@ -13,6 +13,7 @@ export default async function PortfolioPage() {
   const completed = projects.filter(p => p.category === "completed");
   const ongoing = projects.filter(p => p.category === "ongoing");
   const university = projects.filter(p => p.category === "university");
+  const qaTesting = projects.filter(p => p.category === "qa-testing");
 
   const Section = ({ title, items }: { title: string; items: typeof projects }) => items.length === 0 ? null : (
     <div className="mb-14">
@@ -57,10 +58,16 @@ export default async function PortfolioPage() {
         <div className="max-w-5xl mx-auto">
           <span className="section-label">Our Work</span>
           <h1 className="text-display mb-4">Project Portfolio</h1>
-          <p className="text-subheading mb-14">Software systems and applications built by {config.businessName}.</p>
+          <p className="text-subheading mb-14">
+            Software systems and applications built by {config.businessName}. 
+            <Link href="/qa-testing" className="text-[#4f8ef7] hover:underline text-sm ml-3">
+              View our testing experience &rarr;
+            </Link>
+          </p>
           <Section title="Completed Projects" items={completed} />
           <Section title="Ongoing Projects" items={ongoing} />
           <Section title="Academic Projects" items={university} />
+          <Section title="QA & Testing" items={qaTesting} />
         </div>
       </section>
       <Footer />

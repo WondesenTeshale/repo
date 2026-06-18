@@ -9,7 +9,7 @@
 create table if not exists projects (
   id uuid primary key default gen_random_uuid(),
   name text not null,
-  category text not null check (category in ('completed', 'ongoing', 'university')),
+  category text not null check (category in ('completed', 'ongoing', 'university', 'qa-testing')),
   description text default '',
   technologies_used text[] default '{}',
   screenshots text[] default '{}',

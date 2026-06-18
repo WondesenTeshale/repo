@@ -75,6 +75,7 @@ export default function ProjectsTab({ projects, token, onRefresh }: Props) {
               <option value="completed">Completed</option>
               <option value="ongoing">Ongoing</option>
               <option value="university">University</option>
+              <option value="qa-testing">QA & Testing</option>
             </select>
           </div>
         </div>

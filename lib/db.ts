@@ -19,7 +19,7 @@ export const HASHED_PASS = "9d5e925caefcdf63e607f18dfd9c038485cd12e315378577b941
 export interface Project {
   id: string;
   name: string;
-  category: "completed" | "ongoing" | "university";
+  category: "completed" | "ongoing" | "university" | "qa-testing";
   description: string;
   technologiesUsed: string[];
   screenshots: string[];
@@ -49,6 +49,8 @@ export interface BusinessConfig {
   githubNebiyu?: string;
   linkedInEyob?: string;
   githubEyob?: string;
+  linkedInAbel?: string;
+  githubAbel?: string;
 }
 
 export interface TeamMember {
@@ -100,6 +102,8 @@ export const INITIAL_CONFIG: BusinessConfig = {
   githubNebiyu: "https://github.com/nebiyu-m",
   linkedInEyob: "https://linkedin.com/in/eyob-mulugeta",
   githubEyob: "https://github.com/eyobcode",
+  linkedInAbel: "https://linkedin.com/in/abel-tadesse",
+  githubAbel: "https://github.com/abel-tadesse",
 };
 
 // ─── Row mapping helpers ──────────────────────────────────────
@@ -180,6 +184,8 @@ export function rowToConfig(row: any): BusinessConfig {
     githubNebiyu: row.github_nebiyu ?? "",
     linkedInEyob: row.linkedin_eyob ?? "",
     githubEyob: row.github_eyob ?? "",
+    linkedInAbel: row.linkedin_abel ?? "",
+    githubAbel: row.github_abel ?? "",
   };
 }
 

@@ -8,55 +8,68 @@ import Footer from "@/components/Footer";
 
 const services = [
   {
-    id: "web-development",
+    id: "development",
     icon: Globe,
-    title: "Custom Web Development",
-    summary: "Build responsive web applications using modern technologies.",
-    detail:
-      "We design and build full-stack web applications tailored to your requirements. This includes everything from simple informational sites to complex multi-user platforms with authentication, databases, and admin dashboards.",
-    examples: ["Business management dashboards", "Customer portals", "Internal tools", "CRUD applications"],
-    stack: ["React", "Next.js", "Node.js", "Python", "Django", "PostgreSQL", "MySQL"],
+    title: "Development",
+    summary: "Full Stack, Frontend, Backend, and API Development.",
+    detail: "We build highly scalable web applications and backend systems using industry-standard technologies like React, Next.js, Node.js, and PostgreSQL. From robust APIs to complex user interfaces.",
+    examples: ["Full Stack Development", "Frontend Development", "Backend Development", "API Development"],
+    stack: ["React", "Next.js", "Node.js", "Python", "SQL"],
   },
   {
-    id: "api-development",
-    icon: Plug,
-    title: "API Development",
-    summary: "Design and implement APIs and backend systems.",
-    detail:
-      "We build RESTful and GraphQL APIs that connect your frontend applications, mobile apps, or third-party services. Clean API design, authentication, rate limiting, and documentation included.",
-    examples: ["REST APIs for mobile apps", "Third-party service integrations", "Payment gateway connections", "Backend microservices"],
-    stack: ["Node.js", "Express", "FastAPI", "Django REST", "PostgreSQL", "Redis"],
+    id: "qa-testing",
+    icon: Bot, // Just using an existing imported icon, we can use ShieldCheck or Bug if imported, but let's stick to what's likely imported or add an import later. Actually, wait. I need to make sure the icon is imported. Let's use Plug.
+    title: "Quality Assurance",
+    summary: "Comprehensive software testing to ensure stability and quality.",
+    detail: "We rigorously test applications before they hit production, verifying logic flows, UI consistency, and edge cases across varying devices.",
+    examples: ["Manual Testing", "Regression Testing", "UAT Testing", "Mobile App Testing", "Website Testing"],
+    stack: ["Jest", "Cypress", "Playwright", "Postman", "Selenium"],
   },
   {
     id: "automation",
     icon: Zap,
-    title: "Automation Solutions",
+    title: "Automation",
     summary: "Automate repetitive workflows and business processes.",
-    detail:
-      "We build scripts and software tools that automate time-consuming manual tasks. This includes data processing, file management, scheduled reports, web scraping, and workflow orchestration.",
-    examples: ["Automated reporting", "Data import/export pipelines", "Scheduled tasks and cron jobs", "Workflow automation scripts"],
-    stack: ["Python", "Bash", "Selenium", "Playwright", "Celery", "Apache Airflow"],
+    detail: "We engineer scripts and software tools that automate time-consuming manual tasks, data scraping, and file processing.",
+    examples: ["Business Automation", "Workflow Automation", "Browser Automation"],
+    stack: ["Python", "Selenium", "Playwright", "Bash"],
   },
   {
-    id: "ai-integration",
+    id: "ai",
     icon: Bot,
-    title: "AI Integration",
-    summary: "Integrate AI tools and services into existing workflows.",
-    detail:
-      "We integrate AI capabilities — including language models, document analysis, and intelligent search — into your existing software systems. This is about practical integration, not building AI from scratch.",
-    examples: ["AI-assisted content processing", "Document summarization pipelines", "AI chatbot integration", "Intelligent data classification"],
-    stack: ["OpenAI API", "LangChain", "Python", "Vector databases", "REST APIs"],
+    title: "AI & Machine Learning",
+    summary: "Integrate intelligent features into existing software.",
+    detail: "We implement machine learning models and AI integrations to create smarter workflows and predictive data pipelines.",
+    examples: ["AI Integrations", "Machine Learning Projects", "Model Training Pipelines"],
+    stack: ["OpenAI API", "Python", "TensorFlow / PyTorch concepts"],
   },
   {
-    id: "consulting",
+    id: "content-media",
     icon: MessageSquare,
-    title: "Technical Consulting",
-    summary: "Architecture reviews, project planning, and software guidance.",
-    detail:
-      "We provide technical guidance for founders and business owners who need software advice. This includes reviewing your existing codebase, planning a new project architecture, or helping you evaluate technology choices.",
-    examples: ["Technology stack selection", "Code reviews", "Project scoping and estimation", "Architecture planning sessions"],
-    stack: ["Varies by project"],
+    title: "Content & Media",
+    summary: "Motion graphics and cinematic animation systems.",
+    detail: "We build programmatic motion graphics architectures for rendering professional, cinematic overlays and geographic visualizations.",
+    examples: ["Motion Graphics Systems", "Map Animation Systems"],
+    stack: ["Remotion", "React", "Three.js", "CesiumJS"],
   },
+  {
+    id: "wordpress",
+    icon: Globe,
+    title: "WordPress",
+    summary: "Custom theme and plugin development for content sites.",
+    detail: "We manage, develop, and optimize WordPress installations for content-heavy businesses.",
+    examples: ["Site Development", "Site Management", "Custom Plugin Development"],
+    stack: ["PHP", "MySQL", "WordPress API"],
+  },
+  {
+    id: "performance-optimization",
+    icon: Zap,
+    title: "Performance Optimization",
+    summary: "Speed up existing software and database layers.",
+    detail: "We review existing codebases and database architectures to identify and fix performance bottlenecks.",
+    examples: ["Database Indexing", "Asset Optimization", "Caching Strategies"],
+    stack: ["Redis", "PostgreSQL", "CDN Configuration"],
+  }
 ];
 
 export default function ServicesPage() {
