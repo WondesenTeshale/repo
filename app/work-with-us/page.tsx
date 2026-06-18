@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { apiSubmitContactMessage } from "@/lib/db";
 
 export default function WorkWithUsPage() {
   // Form state
@@ -60,14 +61,25 @@ export default function WorkWithUsPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
     setLoading(true);
-    // Simulate submission request delay
-    setTimeout(() => {
-      setLoading(false);
+    
+    // Combine fields into the standard contact message format
+    const fullMessage = `GitHub: ${formData.githubProfile || "N/A"}\nPortfolio: ${formData.portfolioWebsite || "N/A"}\nSkills: ${formData.skills}\n\nMessage:\n${formData.message}`;
+    
+    const result = await apiSubmitContactMessage({
+      name: formData.fullName,
+      email: formData.email,
+      subject: "Work With Us Application",
+      message: fullMessage
+    });
+    
+    setLoading(false);
+
+    if (result) {
       setSubmitted(true);
       setFormData({
         fullName: "",
@@ -77,7 +89,9 @@ export default function WorkWithUsPage() {
         skills: "",
         message: ""
       });
-    }, 1500);
+    } else {
+      setErrors({ submit: "Failed to submit application. Please try again later." });
+    }
   };
 
   const scrollToSection = (id: string) => {
@@ -373,6 +387,8 @@ export default function WorkWithUsPage() {
                     />
                     {errors.message && <span className="text-[10px] text-red-400 mt-1 block">{errors.message}</span>}
                   </div>
+
+                  {errors.submit && <p className="text-xs text-red-400 mt-2">{errors.submit}</p>}
 
                   {/* Submit Button */}
                   <button 
