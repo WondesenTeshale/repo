@@ -36,6 +36,7 @@ export interface Project {
   projectOutcome: string;
   projectChallenges: string;
   notes: string;
+  displayOrder: number;
 }
 
 export interface BusinessConfig {
@@ -134,6 +135,7 @@ export function rowToProject(row: any): Project {
     projectOutcome: row.project_outcome ?? "",
     projectChallenges: row.project_challenges ?? "",
     notes: row.notes ?? "",
+    displayOrder: row.display_order ?? 0,
   };
 }
 
@@ -158,6 +160,7 @@ export function projectToRow(p: Project) {
     project_outcome: p.projectOutcome,
     project_challenges: p.projectChallenges,
     notes: p.notes,
+    display_order: p.displayOrder,
   };
 }
 
@@ -228,6 +231,7 @@ export async function fetchProjects(): Promise<Project[]> {
   const { data, error } = await supabase
     .from("projects")
     .select("*")
+    .order("display_order", { ascending: true })
     .order("created_at", { ascending: false });
   if (error) { console.error("fetchProjects:", error); return []; }
   return (data ?? []).map(rowToProject);
@@ -467,6 +471,7 @@ export function newProject(): Project {
     projectOutcome: "",
     projectChallenges: "",
     notes: "",
+    displayOrder: 0,
   };
 }
 

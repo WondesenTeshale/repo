@@ -57,6 +57,7 @@ export default function ProjectsTab({ projects, token, onRefresh }: Props) {
         <div className="grid sm:grid-cols-2 gap-4">
           {[
             ["Project Name", "name", "text"],
+            ["Display Order", "displayOrder", "number"],
             ["GitHub Repository", "githubRepository", "text"],
             ["Live Demo URL", "liveDemo", "text"],
             ["Start Date", "projectStartDate", "date"],
@@ -66,7 +67,7 @@ export default function ProjectsTab({ projects, token, onRefresh }: Props) {
           ].map(([label, key, type]) => (
             <div key={key}>
               <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block">{label}</label>
-              <input type={type} value={(editing as never)[key] ?? ""} onChange={e => set(key as keyof Project, e.target.value)} className="input w-full" />
+              <input type={type} value={(editing as never)[key] ?? ""} onChange={e => set(key as keyof Project, type === "number" ? parseInt(e.target.value) || 0 : e.target.value)} className="input w-full" />
             </div>
           ))}
           <div>
