@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,7 +12,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "BetterDose — Software Development & Digital Services",
   description:
-    "BetterDose is a software development and digital services studio operated by Nebiyu Muluadam and Eyob Mulugeta, registered in the United Kingdom with operational office in Addis Ababa, Ethiopia.",
+    "BetterDose is a software development and digital services studio operated by Nebiyu Muluadam and His Team of developers and testers, registered in the United Kingdom with operational office in Addis Ababa, Ethiopia.",
   keywords: [
     "BetterDose software",
     "software engineer Ethiopia",
@@ -20,9 +21,8 @@ export const metadata: Metadata = {
     "automation solutions",
     "digital services",
     "Nebiyu Muluadam",
-    "Eyob Mulugeta",
   ],
-  authors: [{ name: "Nebiyu Muluadam" }, { name: "Eyob Mulugeta" }],
+  authors: [{ name: "Nebiyu Muluadam" }],
   creator: "BetterDose",
   openGraph: {
     type: "website",
@@ -48,7 +48,24 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        
+        {/* Tawk.to Live Chat Script */}
+        <Script id="tawk-to" strategy="lazyOnload">
+          {`
+            var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+            (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/6a3463b2af13711d4df030b9/1jreaasj7';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+            })();
+          `}
+        </Script>
+      </body>
     </html>
   );
 }

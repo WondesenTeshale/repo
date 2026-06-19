@@ -10,7 +10,11 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
+  { label: "Deliverables", href: "/deliverables" },
+  { label: "Activity", href: "/activity" },
   { label: "About", href: "/about" },
+  { label: "Work With Us", href: "/work-with-us" },
+  { label: "Business Info", href: "/business-info" },
 ];
 
 export default function Navbar() {
@@ -41,8 +45,9 @@ export default function Navbar() {
           className="flex items-center gap-2.5 group shrink-0"
           aria-label="Home"
         >
-          <div className="w-7 h-7 rounded-lg bg-[#4f8ef7]/15 border border-[#4f8ef7]/30 flex items-center justify-center">
-            <Code2 size={14} className="text-[#4f8ef7]" />
+          <div className="w-7 h-7 rounded-lg border border-[#252d3d] flex items-center justify-center overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="BetterDose Logo" className="w-full h-full object-cover" />
           </div>
           <span className="font-semibold text-[#e8eaf2] text-sm tracking-tight">
             BetterDose
@@ -70,7 +75,10 @@ export default function Navbar() {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden lg:block shrink-0">
+        <div className="hidden lg:flex items-center gap-2 shrink-0">
+          <Link href="/admin" className="btn btn-ghost text-xs py-1.5 px-3.5 border-transparent">
+            Access Portal
+          </Link>
           <Link href="/contact" className="btn btn-primary text-xs py-1.5 px-3.5">
             Contact
           </Link>
@@ -114,7 +122,13 @@ export default function Navbar() {
                   </Link>
                 );
               })}
-              <div className="pt-3 mt-2 border-t border-[#252d3d]">
+              <div className="pt-3 mt-2 border-t border-[#252d3d] flex flex-col gap-2">
+                <Link
+                  href="/admin"
+                  className="btn btn-ghost w-full justify-center text-sm"
+                >
+                  Access Portal
+                </Link>
                 <Link
                   href="/contact"
                   className="btn btn-primary w-full justify-center text-sm"

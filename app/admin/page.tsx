@@ -34,6 +34,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [tab, setTab] = useState<Tab>("projects");
+  const [forgotClicked, setForgotClicked] = useState(false);
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [config, setConfig] = useState<BusinessConfig | null>(null);
@@ -76,26 +77,152 @@ export default function AdminPage() {
 
   if (!authed) {
     return (
-      <main className="min-h-screen">
+      <main className="min-h-screen flex">
         <Navbar />
-        <section className="pt-40 pb-24 px-6 flex items-center justify-center">
-          <div className="card p-8 w-full max-w-sm">
-            <h1 className="text-heading mb-6">Admin Login</h1>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block">Username</label>
-                <input className="input w-full" type="text" value={username} onChange={e => setUsername(e.target.value)} autoComplete="username" />
+        {/* Left panel — full-bleed cinematic background */}
+        <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+          <img
+            src="/images/admin-login-bg.png"
+            alt="Admin Portal"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Dark overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0f1117]/30 via-transparent to-[#0f1117]/60" />
+          {/* Animated floating glow orbs */}
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#4f8ef7]/10 blur-[80px] animate-pulse" style={{ animationDuration: '3s' }} />
+          <div className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-[#818cf8]/10 blur-[60px] animate-pulse" style={{ animationDuration: '5s' }} />
+          {/* Branding overlay */}
+          <div className="relative z-10 flex flex-col justify-end p-12 w-full">
+            <div className="mb-3">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#4f8ef7] font-semibold">BetterDose Studio</span>
+            </div>
+            <h2 className="text-3xl font-bold text-white leading-tight mb-3">
+              Secure<br />Admin Portal
+            </h2>
+            <p className="text-sm text-[#8b92a9] max-w-xs leading-relaxed">
+              Authorized personnel only. All access attempts are logged and monitored.
+            </p>
+            {/* Security badges */}
+            <div className="flex items-center gap-3 mt-6">
+              <div className="flex items-center gap-1.5 bg-[#0f1117]/60 backdrop-blur-sm border border-[#252d3d] rounded-full px-3 py-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
+                <span className="text-[10px] text-[#8b92a9] font-medium">SHA-256 Secured</span>
               </div>
-              <div>
-                <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block">Password</label>
-                <input className="input w-full" type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" />
+              <div className="flex items-center gap-1.5 bg-[#0f1117]/60 backdrop-blur-sm border border-[#252d3d] rounded-full px-3 py-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#4f8ef7]" />
+                <span className="text-[10px] text-[#8b92a9] font-medium">Session Encrypted</span>
               </div>
-              {error && <p className="text-xs text-red-400">{error}</p>}
-              <button type="submit" className="btn btn-primary w-full justify-center"><LogIn size={14} /> Sign In</button>
-            </form>
+            </div>
           </div>
-        </section>
-        <Footer />
+        </div>
+
+        {/* Right panel — Login form */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center justify-center min-h-screen bg-[#0f1117] relative px-8 py-16">
+          {/* Subtle background glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[#4f8ef7]/5 blur-[100px] pointer-events-none" />
+
+          <div className="w-full max-w-sm relative z-10">
+            {/* Logo mark */}
+            <div className="flex items-center gap-2.5 mb-10">
+              <div className="w-8 h-8 rounded-lg bg-[#4f8ef7]/15 border border-[#4f8ef7]/30 flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+                </svg>
+              </div>
+              <span className="font-semibold text-[#e8eaf2] text-sm tracking-tight">BetterDose</span>
+            </div>
+
+            {forgotClicked ? (
+              <div className="space-y-6">
+                <div>
+                  <h1 className="text-2xl font-bold text-[#e8eaf2] mb-2">Reset Password</h1>
+                  <p className="text-sm text-[#8b92a9] leading-relaxed">
+                    Administrative credentials must be reset manually by the core team for security.
+                  </p>
+                </div>
+
+                <div className="bg-[#121620] border border-[#3a4460] rounded-xl p-5 space-y-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <p className="text-[10px] text-[#4f8ef7] uppercase tracking-widest font-semibold">Contact Address</p>
+                  </div>
+                  <p className="text-xs text-[#8b92a9]">Send a password reset request to:</p>
+                  <a href="mailto:admin@betterdose.dev" className="text-sm text-[#4f8ef7] hover:text-[#6ba3f9] font-semibold block transition-colors">
+                    admin@betterdose.dev
+                  </a>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setForgotClicked(false)}
+                  className="btn btn-ghost w-full justify-center"
+                >
+                  ← Back to Sign In
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="mb-8">
+                  <h1 className="text-2xl font-bold text-[#e8eaf2] mb-1">Welcome back</h1>
+                  <p className="text-sm text-[#556080]">Sign in to access your dashboard</p>
+                </div>
+
+                <form onSubmit={handleLogin} className="space-y-5">
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-2 block font-semibold">Username</label>
+                    <input
+                      className="input w-full"
+                      type="text"
+                      value={username}
+                      onChange={e => setUsername(e.target.value)}
+                      autoComplete="username"
+                      placeholder="Enter your username"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-[10px] uppercase tracking-widest text-[#556080] block font-semibold">Password</label>
+                      <button
+                        type="button"
+                        onClick={() => setForgotClicked(true)}
+                        className="text-[10px] text-[#4f8ef7] hover:text-[#6ba3f9] bg-transparent border-0 cursor-pointer p-0 transition-colors"
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
+                    <input
+                      className="input w-full"
+                      type="password"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      autoComplete="current-password"
+                      placeholder="Enter your password"
+                    />
+                  </div>
+
+                  {error && (
+                    <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      <p className="text-xs text-red-400">{error}</p>
+                    </div>
+                  )}
+
+                  <button type="submit" className="btn btn-primary w-full justify-center mt-2">
+                    <LogIn size={14} /> Sign In to Dashboard
+                  </button>
+                </form>
+
+                <p className="text-center text-[10px] text-[#3a4460] mt-8">
+                  Access restricted to authorized team members only.
+                </p>
+              </>
+            )}
+          </div>
+        </div>
       </main>
     );
   }

@@ -6,13 +6,13 @@ import { v4 as uuidv4 } from "uuid";
 export const LOCKED_IDENTITY = {
   businessName: "BetterDose",
   ownerName: "Nebiyu Muluadam",
-  ukRegistryNumber: "12345678",
-  address: "Addis Ababa, Ethiopia",
+  ukRegistryNumber: "16119809",
+  address: "Office 10954, 182-184 High Street North, East Ham, London E6 2JA / Addis Ababa, Ethiopia",
 };
 
 // SHA-256 admin credentials
-export const HASHED_USER = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
-export const HASHED_PASS = "9d5e925caefcdf63e607f18dfd9c038485cd12e315378577b941861de228da89";
+export const HASHED_USER = "465b4559212c20268d1a7390f2edc759df98fd7de88fb185cedada852578d824";
+export const HASHED_PASS = "d21f966e9781321ea264408f2003fc328ed6c5c5a16cd50a91331736f72450a2";
 
 // ─── Types ────────────────────────────────────────────────────
 
@@ -43,6 +43,8 @@ export interface BusinessConfig {
   ownerName: string;
   email: string;
   phone: string;
+  phone2?: string;
+  phone3?: string;
   address: string;
   ukRegistryNumber?: string;
   linkedInNebiyu?: string;
@@ -96,14 +98,16 @@ export interface ContactMessage {
 
 export const INITIAL_CONFIG: BusinessConfig = {
   ...LOCKED_IDENTITY,
-  email: "contact@betterdose.website",
-  phone: "+251 911 000000",
-  linkedInNebiyu: "https://linkedin.com/in/nebiyu-muluadam",
-  githubNebiyu: "https://github.com/nebiyu-m",
-  linkedInEyob: "https://linkedin.com/in/eyob-mulugeta",
-  githubEyob: "https://github.com/eyobcode",
-  linkedInAbel: "https://linkedin.com/in/abel-tadesse",
-  githubAbel: "https://github.com/abel-tadesse",
+  email: "",
+  phone: "",
+  phone2: "",
+  phone3: "",
+  linkedInNebiyu: "",
+  githubNebiyu: "",
+  linkedInEyob: "",
+  githubEyob: "",
+  linkedInAbel: "",
+  githubAbel: "",
 };
 
 // ─── Row mapping helpers ──────────────────────────────────────
@@ -180,6 +184,8 @@ export function rowToConfig(row: any): BusinessConfig {
     ...LOCKED_IDENTITY,
     email: row.email ?? "",
     phone: row.phone ?? "",
+    phone2: row.phone2 ?? "",
+    phone3: row.phone3 ?? "",
     linkedInNebiyu: row.linkedin_nebiyu ?? "",
     githubNebiyu: row.github_nebiyu ?? "",
     linkedInEyob: row.linkedin_eyob ?? "",

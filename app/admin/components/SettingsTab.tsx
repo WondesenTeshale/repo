@@ -53,7 +53,9 @@ export default function SettingsTab({ config, token, onRefresh }: Props) {
       <div className="grid sm:grid-cols-2 gap-4">
         {([
           ["Contact Email", "email"],
-          ["Phone Number", "phone"],
+          ["Phone Number 1", "phone"],
+          ["Phone Number 2", "phone2"],
+          ["Phone Number 3", "phone3"],
           ["LinkedIn — Nebiyu", "linkedInNebiyu"],
           ["GitHub — Nebiyu", "githubNebiyu"],
           ["LinkedIn — Eyob", "linkedInEyob"],

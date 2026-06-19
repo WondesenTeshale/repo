@@ -22,15 +22,16 @@ export default function Footer() {
           {/* Column 1: Brand & Identity */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 rounded-lg bg-[#4f8ef7]/15 border border-[#4f8ef7]/30 flex items-center justify-center">
-                <Code2 size={12} className="text-[#4f8ef7]" />
+              <div className="w-6 h-6 rounded-lg border border-[#252d3d] flex items-center justify-center overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.jpg" alt="BetterDose Logo" className="w-full h-full object-cover" />
               </div>
               <span className="font-semibold text-[#e8eaf2] text-sm font-mono">
                 {config.businessName}
               </span>
             </div>
             <p className="text-xs text-[#8b92a9] leading-relaxed max-w-sm mb-4">
-              Software development and digital services studio operated by {config.ownerName} and Eyob Mulugeta. Registered in the United Kingdom, operating from {config.address}.
+              Software development and digital services studio operated by {config.ownerName} and His Team of developers and testers. Registered in the United Kingdom, operating from {config.address}.
             </p>
             <div className="flex flex-col gap-1.5 text-xs text-[#556080]">
               <div className="flex items-center gap-1.5">

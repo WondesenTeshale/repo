@@ -39,6 +39,8 @@ create table if not exists business_config (
   id int primary key default 1,
   email text default 'contact@betterdose.website',
   phone text default '+251 911 000000',
+  phone2 text default '',
+  phone3 text default '',
   linkedin_nebiyu text default 'https://linkedin.com/in/nebiyu-muluadam',
   github_nebiyu text default 'https://github.com/nebiyu-m',
   linkedin_eyob text default 'https://linkedin.com/in/eyob-mulugeta',

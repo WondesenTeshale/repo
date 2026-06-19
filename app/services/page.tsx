@@ -77,18 +77,28 @@ export default function ServicesPage() {
     <main className="min-h-screen">
       <Navbar />
 
-      <section className="pt-32 pb-24 px-6">
-        <div className="max-w-5xl mx-auto">
+      {/* ─── HERO BANNER ─────────────────────────────── */}
+      <section className="relative pt-32 pb-0 overflow-hidden">
+        <div className="relative h-64 md:h-80 w-full">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0f1117]/50 via-transparent to-[#0f1117] z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0f1117]/60 via-transparent to-[#0f1117]/60 z-10" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/services-hero.png" alt="BetterDose Services" className="w-full h-full object-cover object-center" />
+          <div className="absolute bottom-10 left-6 md:left-12 z-20 max-w-5xl">
+            <span className="section-label">Services</span>
+            <h1 className="text-display mt-1">What We Can Build For You</h1>
+          </div>
+        </div>
+      </section>
 
-          {/* Page header */}
+      <section className="pb-24 px-6">
+        <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className="max-w-2xl mb-16"
+            className="max-w-2xl pt-10 pb-10 border-b border-[#252d3d] mb-14"
           >
-            <span className="section-label">Services</span>
-            <h1 className="text-display mb-4">What We Can Build For You</h1>
             <p className="text-subheading">
               BetterDose works with businesses and individuals on software projects that have a clear purpose.
               Here&apos;s what we specialize in.
