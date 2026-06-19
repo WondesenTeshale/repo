@@ -7,6 +7,11 @@ interface Props { projects: Project[]; token: string; onRefresh: () => void; }
 
 const EMPTY = newProject();
 
+function isVideo(url: string) {
+  const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase();
+  return ext ? ["mp4", "webm", "ogg", "mov", "m4v"].includes(ext) : false;
+}
+
 export default function ProjectsTab({ projects, token, onRefresh }: Props) {
   const [editing, setEditing] = useState<Project | null>(null);
   const [saving, setSaving] = useState(false);
@@ -106,19 +111,23 @@ export default function ProjectsTab({ projects, token, onRefresh }: Props) {
           </div>
         ))}
         <div>
-          <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-2 block">Screenshots</label>
+          <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-2 block">Media (Screenshots & Videos)</label>
           <div className="flex flex-wrap gap-2 mb-3">
             {editing.screenshots.map(url => (
               <div key={url} className="relative group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={url} alt="screenshot" className="h-20 w-28 object-cover rounded border border-[#252d3d]" />
+                {isVideo(url) ? (
+                  <video src={url} className="h-20 w-28 object-cover rounded border border-[#252d3d]" muted playsInline />
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={url} alt="media" className="h-20 w-28 object-cover rounded border border-[#252d3d]" />
+                )}
                 <button type="button" onClick={() => removeScreenshot(url)} className="absolute top-1 right-1 bg-red-500 rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"><X size={10} /></button>
               </div>
             ))}
           </div>
           <label className="btn btn-ghost text-xs py-1.5 px-3 cursor-pointer inline-flex items-center gap-1.5">
-            <Upload size={13} /> {uploading ? "Uploading..." : "Upload Screenshots"}
-            <input type="file" multiple accept="image/*" className="hidden" onChange={e => handleImageUpload(e.target.files)} disabled={uploading} />
+            <Upload size={13} /> {uploading ? "Uploading..." : "Upload Media"}
+            <input type="file" multiple accept="image/*,video/*" className="hidden" onChange={e => handleImageUpload(e.target.files)} disabled={uploading} />
           </label>
         </div>
         <button type="button" onClick={handleSave} disabled={saving} className="btn btn-primary w-full justify-center">

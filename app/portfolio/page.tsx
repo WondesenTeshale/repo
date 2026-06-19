@@ -7,6 +7,11 @@ import { ArrowRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Portfolio — BetterDose", description: "Software projects built by the BetterDose development team." };
 
+function isVideo(url: string) {
+  const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase();
+  return ext ? ["mp4", "webm", "ogg", "mov", "m4v"].includes(ext) : false;
+}
+
 export default async function PortfolioPage() {
   const [projects, config] = await Promise.all([fetchProjects(), fetchConfig()]);
 
@@ -30,8 +35,12 @@ export default async function PortfolioPage() {
               </div>
               <p className="text-xs text-[#8b92a9] leading-relaxed mb-4">{p.description}</p>
               {p.screenshots[0] && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={p.screenshots[0]} alt={p.name} className="w-full h-36 object-cover rounded-lg border border-[#252d3d] mb-4" />
+                isVideo(p.screenshots[0]) ? (
+                  <video src={p.screenshots[0]} className="w-full h-36 object-cover rounded-lg border border-[#252d3d] mb-4" muted playsInline autoPlay loop />
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.screenshots[0]} alt={p.name} className="w-full h-36 object-cover rounded-lg border border-[#252d3d] mb-4" />
+                )
               )}
             </div>
             <div>
