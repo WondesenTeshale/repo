@@ -35,6 +35,11 @@ const fadeUp = {
   }),
 };
 
+function isVideo(url: string) {
+  const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase();
+  return ext ? ["mp4", "webm", "ogg", "mov", "m4v"].includes(ext) : false;
+}
+
 export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [config, setConfig] = useState<BusinessConfig>(INITIAL_CONFIG);
@@ -231,8 +236,12 @@ export default function HomePage() {
             {projects.map((project) => (
               <div key={project.id} className="card flex flex-col justify-between overflow-hidden group">
                 {project.screenshots && project.screenshots[0] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={project.screenshots[0]} alt={project.name} className="w-full h-40 object-cover border-b border-[#252d3d] group-hover:scale-105 transition-transform duration-500" />
+                  isVideo(project.screenshots[0]) ? (
+                    <video src={project.screenshots[0]} className="w-full h-40 object-cover border-b border-[#252d3d] group-hover:scale-105 transition-transform duration-500" muted playsInline autoPlay loop />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={project.screenshots[0]} alt={project.name} className="w-full h-40 object-cover border-b border-[#252d3d] group-hover:scale-105 transition-transform duration-500" />
+                  )
                 ) : (
                   <div className="w-full h-40 bg-[#121620] border-b border-[#252d3d] flex items-center justify-center text-[#252d3d]">
                     <Globe size={32} />
