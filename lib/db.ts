@@ -329,6 +329,8 @@ export async function apiSaveConfig(config: BusinessConfig, token: string): Prom
       github_nebiyu: config.githubNebiyu,
       linkedin_eyob: config.linkedInEyob,
       github_eyob: config.githubEyob,
+      linkedin_abel: config.linkedInAbel,
+      github_abel: config.githubAbel,
     }),
   });
   return res.ok;

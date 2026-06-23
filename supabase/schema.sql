@@ -47,6 +47,8 @@ create table if not exists business_config (
   github_nebiyu text default 'https://github.com/nebiyu-m',
   linkedin_eyob text default 'https://linkedin.com/in/eyob-mulugeta',
   github_eyob text default 'https://github.com/eyobcode',
+  linkedin_abel text default '',
+  github_abel text default '',
   updated_at timestamptz default now()
 );
 
