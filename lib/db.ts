@@ -323,6 +323,8 @@ export async function apiSaveConfig(config: BusinessConfig, token: string): Prom
     body: JSON.stringify({
       email: config.email,
       phone: config.phone,
+      phone2: config.phone2,
+      phone3: config.phone3,
       linkedin_nebiyu: config.linkedInNebiyu,
       github_nebiyu: config.githubNebiyu,
       linkedin_eyob: config.linkedInEyob,
