@@ -4,13 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { ArrowLeft, GitBranch, ExternalLink, CheckCircle, Shield, Calendar, Users } from "lucide-react";
+import ProjectMediaGallery from "@/components/ProjectMediaGallery";
 
 export const dynamic = "force-dynamic";
-
-function isVideo(url: string) {
-  const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase();
-  return ext ? ["mp4", "webm", "ogg", "mov", "m4v"].includes(ext) : false;
-}
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -88,23 +84,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 </div>
               )}
 
-              {project.screenshots.length > 0 && (
-                <div className="card p-6">
-                  <h3 className="text-sm font-semibold text-[#e8eaf2] mb-4">Project Media</h3>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {project.screenshots.map((src, i) => (
-                      <div key={i} className="rounded-lg overflow-hidden border border-[#252d3d] flex items-center justify-center bg-[#07090e]">
-                        {isVideo(src) ? (
-                          <video src={src} controls className="w-full h-auto object-cover max-h-[300px]" />
-                        ) : (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={src} alt={`${project.name} media ${i + 1}`} className="w-full h-auto object-cover" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <ProjectMediaGallery media={project.screenshots} projectName={project.name} />
 
               {project.teamMembers.length > 0 && (
                 <div className="card p-6">
