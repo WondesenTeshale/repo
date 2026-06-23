@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const project = await fetchProjectById(resolvedParams.id);
-  if (!project) notFound();
+  if (!project || project.isPrivate) notFound();
 
   return (
     <main className="min-h-screen">

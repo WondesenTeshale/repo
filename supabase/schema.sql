@@ -27,6 +27,7 @@ create table if not exists projects (
   project_challenges text default '',
   notes text default '',
   display_order int default 0,
+  is_private boolean default false,
   created_at timestamptz default now()
 );
 

@@ -37,6 +37,7 @@ export interface Project {
   projectChallenges: string;
   notes: string;
   displayOrder: number;
+  isPrivate: boolean;
 }
 
 export interface BusinessConfig {
@@ -136,6 +137,7 @@ export function rowToProject(row: any): Project {
     projectChallenges: row.project_challenges ?? "",
     notes: row.notes ?? "",
     displayOrder: row.display_order ?? 0,
+    isPrivate: row.is_private ?? false,
   };
 }
 
@@ -161,6 +163,7 @@ export function projectToRow(p: Project) {
     project_challenges: p.projectChallenges,
     notes: p.notes,
     display_order: p.displayOrder,
+    is_private: p.isPrivate,
   };
 }
 
@@ -231,9 +234,20 @@ export async function fetchProjects(): Promise<Project[]> {
   const { data, error } = await supabase
     .from("projects")
     .select("*")
+    .eq("is_private", false)
     .order("display_order", { ascending: true })
     .order("created_at", { ascending: false });
   if (error) { console.error("fetchProjects:", error); return []; }
+  return (data ?? []).map(rowToProject);
+}
+
+export async function fetchAllProjects(): Promise<Project[]> {
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: false });
+  if (error) { console.error("fetchAllProjects:", error); return []; }
   return (data ?? []).map(rowToProject);
 }
 
@@ -472,6 +486,7 @@ export function newProject(): Project {
     projectChallenges: "",
     notes: "",
     displayOrder: 0,
+    isPrivate: false,
   };
 }
 

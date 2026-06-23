@@ -84,6 +84,10 @@ export default function ProjectsTab({ projects, token, onRefresh }: Props) {
               <option value="qa-testing">QA & Testing</option>
             </select>
           </div>
+          <div className="flex items-center gap-3 mt-4">
+            <input type="checkbox" id="isPrivate" checked={editing.isPrivate} onChange={e => set("isPrivate", e.target.checked)} className="h-4 w-4 rounded border-[#252d3d] bg-[#07090e] text-[#4f8ef7]" />
+            <label htmlFor="isPrivate" className="text-[11px] uppercase tracking-widest text-[#e8eaf2]">Private Project (Hide from public portfolio)</label>
+          </div>
         </div>
         {([
           ["What Problem Was Solved (Description)", "description"],
@@ -147,7 +151,10 @@ export default function ProjectsTab({ projects, token, onRefresh }: Props) {
         {projects.map(p => (
           <div key={p.id} className="card p-4 flex items-center justify-between gap-4">
             <div>
-              <p className="text-sm font-medium text-[#e8eaf2]">{p.name}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-[#e8eaf2]">{p.name}</p>
+                {p.isPrivate && <span className="badge bg-red-500/20 text-red-400 border border-red-500/30 text-[9px]">Private</span>}
+              </div>
               <p className="text-[10px] text-[#556080] mt-0.5">{p.category} · {p.status}</p>
             </div>
             <div className="flex gap-2">

@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Mail, Settings } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { fetchProjects, fetchConfig, fetchTeamMembers, fetchActivityEntries, HASHED_USER, HASHED_PASS, Project, BusinessConfig, TeamMember, ActivityEntry } from "@/lib/db";
+import { fetchProjects, fetchAllProjects, fetchConfig, fetchTeamMembers, fetchActivityEntries, HASHED_USER, HASHED_PASS, Project, BusinessConfig, TeamMember, ActivityEntry } from "@/lib/db";
 import ProjectsTab from "./components/ProjectsTab";
 import TeamTab from "./components/TeamTab";
 import ActivityTab from "./components/ActivityTab";
@@ -44,7 +44,7 @@ export default function AdminPage() {
 
   const loadAll = useCallback(async () => {
     setLoading(true);
-    const [p, c, t, a] = await Promise.all([fetchProjects(), fetchConfig(), fetchTeamMembers(), fetchActivityEntries()]);
+    const [p, c, t, a] = await Promise.all([fetchAllProjects(), fetchConfig(), fetchTeamMembers(), fetchActivityEntries()]);
     setProjects(p); setConfig(c); setMembers(t); setEntries(a);
     setLoading(false);
   }, []);
