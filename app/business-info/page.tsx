@@ -53,7 +53,9 @@ export default function BusinessInfoPage() {
                     { label: "Country of Registration", value: "United Kingdom" },
                     { label: "Operating Team Location", value: config.address },
                     { label: "Contact Email", value: config.email },
-                    { label: "Contact Phone", value: config.phone },
+                    { label: "Contact Phone (Primary)", value: config.phone },
+                    ...(config.phone2 ? [{ label: "Contact Phone (Secondary)", value: config.phone2 }] : []),
+                    ...(config.phone3 ? [{ label: "Contact Phone (Tertiary)", value: config.phone3 }] : []),
                   ].map((row, idx) => (
                     <div key={idx} className="py-3.5 flex flex-col sm:flex-row justify-between gap-1">
                       <span className="text-[#8b92a9] font-medium">{row.label}</span>
