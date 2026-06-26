@@ -79,6 +79,7 @@ export interface ActivityEntry {
   dateLabel: string;
   tech: string[];
   status: string;
+  displayOrder: number;
   createdAt?: string;
 }
 
@@ -211,6 +212,7 @@ export function rowToActivity(row: any): ActivityEntry {
     dateLabel: row.date_label ?? "",
     tech: row.tech ?? [],
     status: row.status ?? "",
+    displayOrder: row.display_order ?? 0,
     createdAt: row.created_at,
   };
 }
@@ -380,6 +382,7 @@ export async function apiUpsertActivity(entry: ActivityEntry, token: string): Pr
       date_label: entry.dateLabel,
       tech: entry.tech,
       status: entry.status,
+      display_order: entry.displayOrder,
     }),
   });
   if (!res.ok) { console.error("apiUpsertActivity:", await res.text()); return null; }
@@ -518,6 +521,7 @@ export function newActivityEntry(): ActivityEntry {
     description: "",
     dateLabel: "",
     tech: [],
-    status: "Shipped",
+    status: "In Development",
+    displayOrder: 0,
   };
 }

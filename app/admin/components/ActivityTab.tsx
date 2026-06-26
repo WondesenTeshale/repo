@@ -65,6 +65,10 @@ export default function ActivityTab({ entries, token, onRefresh }: Props) {
               {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
+          <div>
+            <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block">Display Order</label>
+            <input type="number" value={editing.displayOrder} onChange={e => set("displayOrder", parseInt(e.target.value) || 0)} className="input w-full" />
+          </div>
         </div>
         <div>
           <label className="text-[10px] uppercase tracking-widest text-[#556080] mb-1 block">Description</label>
@@ -92,7 +96,7 @@ export default function ActivityTab({ entries, token, onRefresh }: Props) {
           <div key={e.id} className="card p-4 flex items-start justify-between gap-4">
             <div>
               <p className="text-sm font-medium text-[#e8eaf2]">{e.projectName}</p>
-              <p className="text-[10px] text-[#556080] mt-0.5">{e.entryType} · {e.dateLabel}</p>
+              <p className="text-[10px] text-[#556080] mt-0.5">{e.entryType} · {e.dateLabel} · Order: {e.displayOrder}</p>
               <span className={`text-[9px] font-bold ${statusColors[e.status] ?? ""}`}>{e.status}</span>
             </div>
             <div className="flex gap-2 shrink-0">
