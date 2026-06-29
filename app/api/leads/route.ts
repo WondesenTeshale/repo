@@ -6,35 +6,30 @@ import { HASHED_USER, HASHED_PASS } from "@/lib/db";
 function checkAuth(req: NextRequest): boolean {
   const token = req.headers.get("x-admin-token");
   if (!token) return false;
-  // Token is "user:pass" both sha256 hashed, separated by colon
   const [u, p] = token.split(":");
   return u === HASHED_USER && p === HASHED_PASS;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  if (!checkAuth(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { data, error } = await supabaseAdmin
-    .from("projects")
+    .from("leads")
     .select("*")
-    .order("display_order", { ascending: true })
     .order("created_at", { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
 
-export async function POST(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
   if (!checkAuth(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await req.json();
-  // Auto-generate a random reference code if this is a new project (no ref code yet)
-  if (!body.reference_code) {
-    const rand = Math.floor(Math.random() * 8000) + 1000; // 1000–8999
-    const suffix = Math.floor(Math.random() * 90 + 10);   // 10–99
-    body.reference_code = `BD-${rand}${suffix}`;
-  }
+  const { id, status, notes } = body;
+  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+  const update: Record<string, string> = { updated_at: new Date().toISOString() };
+  if (status !== undefined) update.status = status;
+  if (notes !== undefined) update.notes = notes;
   const { data, error } = await supabaseAdmin
-    .from("projects")
-    .upsert(body, { onConflict: "id" })
-    .select()
-    .single();
+    .from("leads").update(update).eq("id", id).select().single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
@@ -42,7 +37,8 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   if (!checkAuth(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await req.json();
-  const { error } = await supabaseAdmin.from("projects").delete().eq("id", id);
+  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+  const { error } = await supabaseAdmin.from("leads").delete().eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 }

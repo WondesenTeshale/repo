@@ -38,6 +38,7 @@ export interface Project {
   notes: string;
   displayOrder: number;
   isPrivate: boolean;
+  referenceCode: string;
 }
 
 export interface BusinessConfig {
@@ -81,6 +82,21 @@ export interface ActivityEntry {
   status: string;
   displayOrder: number;
   createdAt?: string;
+}
+
+export interface Lead {
+  id: string;
+  leadNumber: number;
+  name: string;
+  email: string;
+  company: string;
+  subject: string;
+  message: string;
+  status: string;
+  source: string;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface StorageFile {
@@ -139,6 +155,7 @@ export function rowToProject(row: any): Project {
     notes: row.notes ?? "",
     displayOrder: row.display_order ?? 0,
     isPrivate: row.is_private ?? false,
+    referenceCode: row.reference_code ?? "",
   };
 }
 
@@ -165,6 +182,7 @@ export function projectToRow(p: Project) {
     notes: p.notes,
     display_order: p.displayOrder,
     is_private: p.isPrivate,
+    reference_code: p.referenceCode,
   };
 }
 
@@ -271,6 +289,49 @@ export async function fetchConfig(): Promise<BusinessConfig> {
     .single();
   if (error) { console.error("fetchConfig:", error); return INITIAL_CONFIG; }
   return rowToConfig(data);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function rowToLead(row: any): Lead {
+  return {
+    id: row.id,
+    leadNumber: row.lead_number,
+    name: row.name,
+    email: row.email,
+    company: row.company ?? "",
+    subject: row.subject ?? "",
+    message: row.message ?? "",
+    status: row.status ?? "New",
+    source: row.source ?? "Contact Form",
+    notes: row.notes ?? "",
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+export async function fetchLeads(token: string): Promise<Lead[]> {
+  const res = await fetch("/api/leads", { headers: adminHeaders(token) });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (data ?? []).map(rowToLead);
+}
+
+export async function apiUpdateLead(id: string, updates: Partial<Pick<Lead, "status" | "notes">>, token: string): Promise<boolean> {
+  const res = await fetch("/api/leads", {
+    method: "PATCH",
+    headers: adminHeaders(token),
+    body: JSON.stringify({ id, ...updates }),
+  });
+  return res.ok;
+}
+
+export async function apiDeleteLead(id: string, token: string): Promise<boolean> {
+  const res = await fetch("/api/leads", {
+    method: "DELETE",
+    headers: adminHeaders(token),
+    body: JSON.stringify({ id }),
+  });
+  return res.ok;
 }
 
 export async function fetchTeamMembers(): Promise<TeamMember[]> {
@@ -494,6 +555,7 @@ export function newProject(): Project {
     notes: "",
     displayOrder: 0,
     isPrivate: false,
+    referenceCode: "",
   };
 }
 

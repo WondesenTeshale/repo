@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Mail, Settings } from "lucide-react";
+import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Mail, Settings, PhoneCall } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { fetchProjects, fetchAllProjects, fetchConfig, fetchTeamMembers, fetchActivityEntries, HASHED_USER, HASHED_PASS, Project, BusinessConfig, TeamMember, ActivityEntry } from "@/lib/db";
@@ -10,13 +10,14 @@ import ActivityTab from "./components/ActivityTab";
 import MediaTab from "./components/MediaTab";
 import SettingsTab from "./components/SettingsTab";
 import MessagesTab from "./components/MessagesTab";
+import CRMTab from "./components/CRMTab";
 
 async function sha256(msg: string) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-type Tab = "projects" | "team" | "activity" | "media" | "messages" | "settings";
+type Tab = "projects" | "team" | "activity" | "media" | "messages" | "crm" | "settings";
 
 const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
   { key: "projects", label: "Projects", icon: <FolderGit size={14} /> },
@@ -24,6 +25,7 @@ const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
   { key: "activity", label: "Activity", icon: <Activity size={14} /> },
   { key: "media", label: "Media", icon: <HardDrive size={14} /> },
   { key: "messages", label: "Messages", icon: <Mail size={14} /> },
+  { key: "crm", label: "CRM", icon: <PhoneCall size={14} /> },
   { key: "settings", label: "Settings", icon: <Settings size={14} /> },
 ];
 
@@ -259,6 +261,7 @@ export default function AdminPage() {
               {tab === "activity" && <ActivityTab entries={entries} token={token} onRefresh={loadAll} />}
               {tab === "media" && <MediaTab token={token} />}
               {tab === "messages" && <MessagesTab token={token} />}
+              {tab === "crm" && <CRMTab token={token} />}
               {tab === "settings" && config && <SettingsTab config={config} token={token} onRefresh={loadAll} />}
             </div>
           )}

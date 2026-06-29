@@ -51,6 +51,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    // Auto-create a CRM lead from this submission
+    await supabaseAdmin.from("leads").insert({
+      name,
+      email,
+      subject: subject || "",
+      message,
+      source: "Contact Form",
+      status: "New",
+    }).select().single();
+
     // Send email notification (does not block database success response)
     // Run asynchronously and log results
     sendContactNotification({ name, email, subject, message }).catch(err => {

@@ -25,7 +25,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           <div className="mb-8 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
-              <span className="section-label">{project.category}</span>
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <span className="section-label">{project.category}</span>
+                {project.referenceCode && (
+                  <span className="text-[10px] font-mono text-[#4f8ef7] bg-[#4f8ef7]/10 border border-[#4f8ef7]/20 px-2 py-0.5 rounded-full font-bold">
+                    {project.referenceCode}
+                  </span>
+                )}
+              </div>
               <h1 className="text-display">{project.name}</h1>
               <p className="text-xs text-[#556080] flex items-center gap-2 mt-2">
                 <Calendar size={11} />

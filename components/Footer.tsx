@@ -86,6 +86,11 @@ export default function Footer() {
                   Industries We Serve
                 </Link>
               </li>
+              <li>
+                <Link href="/how-we-work" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
+                  How We Work
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -1,96 +1,67 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { MessageSquare, FileText, CheckSquare, Layers, ShieldCheck, Truck, CreditCard } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Search, Lightbulb, FileText, Code2, FlaskConical, PackageCheck, Headphones } from "lucide-react";
 
-const steps = [
-  {
-    icon: MessageSquare,
-    title: "1. Client Inquiry",
-    desc: "Clients contact us via our secure contact portal or email detailing the scope of their requirements. We respond with initial validation within 24 to 48 business hours."
-  },
-  {
-    icon: FileText,
-    title: "2. Requirements Gathering",
-    desc: "We conduct detailed reviews to identify target features, system inputs/outputs, database entities, and integrations. This ensures both parties understand the technical boundary limits."
-  },
-  {
-    icon: CheckSquare,
-    title: "3. Proposal & Spec Sheet",
-    desc: "We submit a comprehensive technical proposal including data schemas, system components, milestones, and budget estimates. Work starts only after signing standard contract specifications."
-  },
-  {
-    icon: Layers,
-    title: "4. Development Phase",
-    desc: "All source code is committed to Git repository structures with clear log records. We provide regular milestone updates and build testable prototypes for client preview."
-  },
-  {
-    icon: ShieldCheck,
-    title: "5. Rigorous Testing",
-    desc: "We write unit tests, verify rate-limiting rules, perform security integration tests, and check API payload outputs to ensure durability and prevent runtime errors."
-  },
-  {
-    icon: Truck,
-    title: "6. Production Delivery",
-    desc: "We deploy the application to hosting environments (e.g. Vercel, AWS, or local physical servers) and deliver compiled builds, database structures, and developer documentation."
-  },
-  {
-    icon: CreditCard,
-    title: "7. Secure Payment",
-    desc: "Invoice tracking aligns strictly with agreed milestones. We support international wire transfers, Wise, or PayPal. No payments are requested outside of formal invoices."
-  }
+export const metadata = {
+  title: "How We Work — BetterDose",
+  description: "A transparent look at how BetterDose takes a project from first contact to final delivery and ongoing support.",
+};
+
+const stages = [
+  { icon: Search, number: "01", title: "Inquiry", subtitle: "First Contact", description: "You reach out via the contact form or Work With Us page. We review your request within 24 hours and respond with initial thoughts and any clarifying questions.", color: "#4f8ef7" },
+  { icon: Lightbulb, number: "02", title: "Discovery", subtitle: "Understanding Your Needs", description: "We schedule a discovery session to understand your goals, technical constraints, existing infrastructure, and success criteria. This informs our proposal.", color: "#818cf8" },
+  { icon: FileText, number: "03", title: "Proposal", subtitle: "Scope & Agreement", description: "We deliver a clear written proposal covering project scope, timeline, tech stack, and pricing. Once agreed, work begins. No hidden costs or scope creep.", color: "#a78bfa" },
+  { icon: Code2, number: "04", title: "Development", subtitle: "Building Your Product", description: "Our team gets to work in structured sprints. You receive regular progress updates and can review work at each milestone before we move forward.", color: "#f59e0b" },
+  { icon: FlaskConical, number: "05", title: "QA & Testing", subtitle: "Quality Assurance", description: "Every deliverable goes through rigorous QA — functional testing, edge case coverage, performance checks, and cross-device/browser validation before release.", color: "#06b6d4" },
+  { icon: PackageCheck, number: "06", title: "Delivery", subtitle: "Handover & Launch", description: "We deploy to your environment, hand over all documentation, credentials, and source code. A walkthrough session ensures you are fully in control of what was built.", color: "#34d399" },
+  { icon: Headphones, number: "07", title: "Support", subtitle: "Post-Launch Care", description: "Post-delivery support covers bug fixes, small improvements, and guidance as you grow — because long-term relationships matter.", color: "#f87171" },
 ];
 
 export default function HowWeWorkPage() {
   return (
     <main className="min-h-screen">
       <Navbar />
-
       <section className="pt-32 pb-24 px-6">
         <div className="max-w-4xl mx-auto">
-          
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-            className="mb-12 text-center"
-          >
-            <span className="section-label">Our Process</span>
-            <h1 className="text-display mt-2 mb-4">How We Work</h1>
-            <p className="text-subheading max-w-xl mx-auto">
-              Our structured software development process ensures operational transparency, clear deliverables, and robust system quality.
+          <div className="mb-16">
+            <span className="section-label">Process</span>
+            <h1 className="text-display mb-4">How We Work</h1>
+            <p className="text-subheading max-w-2xl">
+              From your first message to ongoing support — a transparent, structured process that keeps you informed and in control at every stage.
             </p>
-          </motion.div>
+          </div>
 
-          <div className="space-y-6 max-w-3xl mx-auto">
-            {steps.map((step, idx) => {
-              const Icon = step.icon;
+          <div className="space-y-4">
+            {stages.map((stage) => {
+              const Icon = stage.icon;
               return (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.35, delay: idx * 0.05 }}
-                  className="card p-6 flex flex-col sm:flex-row gap-5 items-start"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-[#1f2433] border border-[#252d3d] flex items-center justify-center shrink-0">
-                    <Icon size={18} className="text-[#4f8ef7]" />
+                <div key={stage.number} className="card p-6 flex items-start gap-5 group hover:border-[#4f8ef7]/20 transition-all hover:-translate-y-0.5 duration-200">
+                  <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center shrink-0" style={{ borderColor: stage.color }}>
+                    <Icon size={18} style={{ color: stage.color }} />
                   </div>
-                  <div>
-                    <h2 className="text-sm font-semibold text-[#e8eaf2] mb-1.5">{step.title}</h2>
-                    <p className="text-xs text-[#8b92a9] leading-relaxed">{step.desc}</p>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-1 flex-wrap">
+                      <span className="text-[10px] font-mono font-bold" style={{ color: stage.color }}>{stage.number}</span>
+                      <h2 className="text-sm font-bold text-[#e8eaf2]">{stage.title}</h2>
+                      <span className="text-[10px] text-[#556080]">— {stage.subtitle}</span>
+                    </div>
+                    <p className="text-xs text-[#8b92a9] leading-relaxed">{stage.description}</p>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
 
+          <div className="mt-14 card p-8 text-center">
+            <h2 className="text-base font-semibold text-[#e8eaf2] mb-2">Ready to start a project?</h2>
+            <p className="text-sm text-[#8b92a9] mb-5">The first step is a conversation. Tell us what you are building and we will take it from there.</p>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <a href="/contact" className="btn btn-primary text-sm px-6 py-2.5 inline-flex items-center gap-2">Contact Us</a>
+              <a href="/work-with-us" className="btn btn-ghost text-sm px-6 py-2.5 inline-flex items-center gap-2">Work With Us</a>
+            </div>
+          </div>
         </div>
       </section>
-
       <Footer />
     </main>
   );
