@@ -44,12 +44,24 @@ export default function AdminPage() {
   const [entries, setEntries] = useState<ActivityEntry[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [unreadMessages, setUnreadMessages] = useState(0);
+
   const loadAll = useCallback(async () => {
     setLoading(true);
-    const [p, c, t, a] = await Promise.all([fetchAllProjects(), fetchConfig(), fetchTeamMembers(), fetchActivityEntries()]);
+    const [p, c, t, a, mRes] = await Promise.all([
+      fetchAllProjects(), 
+      fetchConfig(), 
+      fetchTeamMembers(), 
+      fetchActivityEntries(),
+      token ? fetch("/api/contact", { headers: { "x-admin-token": token } }).then(r => r.ok ? r.json() : []) : Promise.resolve([])
+    ]);
     setProjects(p); setConfig(c); setMembers(t); setEntries(a);
+    if (Array.isArray(mRes)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setUnreadMessages(mRes.filter((msg: any) => msg.status === "unread").length);
+    }
     setLoading(false);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("admin_auth");
@@ -246,8 +258,11 @@ export default function AdminPage() {
           <div className="flex gap-1 mb-8 flex-wrap border-b border-[#252d3d] pb-0">
             {TABS.map(t => (
               <button key={t.key} type="button" onClick={() => setTab(t.key)}
-                className={`flex items-center gap-1.5 text-xs px-4 py-2.5 border-b-2 transition-colors -mb-px ${tab === t.key ? "border-[#4f8ef7] text-[#4f8ef7]" : "border-transparent text-[#556080] hover:text-[#8b92a9]"}`}>
+                className={`relative flex items-center gap-1.5 text-xs px-4 py-2.5 border-b-2 transition-colors -mb-px ${tab === t.key ? "border-[#4f8ef7] text-[#4f8ef7]" : "border-transparent text-[#556080] hover:text-[#8b92a9]"}`}>
                 {t.icon} {t.label}
+                {t.key === "messages" && unreadMessages > 0 && (
+                  <span className="absolute top-1.5 right-1 flex h-2 w-2 items-center justify-center rounded-full bg-red-500"></span>
+                )}
               </button>
             ))}
           </div>
