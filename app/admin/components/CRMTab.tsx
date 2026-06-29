@@ -25,6 +25,23 @@ export default function CRMTab({ token }: Props) {
   const [editingNotes, setEditingNotes] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("All");
+  const [revealedEmails, setRevealedEmails] = useState<Set<string>>(new Set());
+
+  const toggleEmail = (id: string) => {
+    setRevealedEmails(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const maskEmail = (email: string) => {
+    if (!email) return "";
+    const parts = email.split("@");
+    if (parts.length !== 2) return email;
+    return `****@${parts[1]}`;
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -105,7 +122,10 @@ export default function CRMTab({ token }: Props) {
                 </div>
                 <p className="text-sm font-semibold text-[#e8eaf2] truncate">{lead.name}</p>
                 <div className="flex items-center gap-3 text-[10px] text-[#556080] mt-0.5 flex-wrap">
-                  <span className="flex items-center gap-1"><Mail size={9} />{lead.email}</span>
+                  <button onClick={() => toggleEmail(lead.id)} className="flex items-center gap-1 hover:text-[#4f8ef7] transition-colors text-left">
+                    <Mail size={9} />
+                    {revealedEmails.has(lead.id) ? lead.email : maskEmail(lead.email)}
+                  </button>
                   {lead.company && <span className="flex items-center gap-1"><Building2 size={9} />{lead.company}</span>}
                   <span className="flex items-center gap-1"><Clock size={9} />{new Date(lead.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
                 </div>
