@@ -77,13 +77,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/resume" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
-                  Resume / CV
+                <Link href="/work-with-us" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
+                  Work With Us
                 </Link>
               </li>
               <li>
-                <Link href="/work-with-us" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
-                  Work With Us
+                <Link href="/industries" className="text-[#8b92a9] hover:text-[#e8eaf2] transition-colors">
+                  Industries We Serve
                 </Link>
               </li>
             </ul>
