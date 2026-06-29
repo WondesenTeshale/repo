@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Mail, Settings, PhoneCall } from "lucide-react";
+import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Mail, Settings, PhoneCall, FileText, ShieldCheck } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { fetchProjects, fetchAllProjects, fetchConfig, fetchTeamMembers, fetchActivityEntries, HASHED_USER, HASHED_PASS, Project, BusinessConfig, TeamMember, ActivityEntry } from "@/lib/db";
@@ -11,13 +11,15 @@ import MediaTab from "./components/MediaTab";
 import SettingsTab from "./components/SettingsTab";
 import MessagesTab from "./components/MessagesTab";
 import CRMTab from "./components/CRMTab";
+import InvoicesTab from "./components/InvoicesTab";
+import ContractsTab from "./components/ContractsTab";
 
 async function sha256(msg: string) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-type Tab = "projects" | "team" | "activity" | "media" | "messages" | "crm" | "settings";
+type Tab = "projects" | "team" | "activity" | "media" | "messages" | "crm" | "invoices" | "contracts" | "settings";
 
 const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
   { key: "projects", label: "Projects", icon: <FolderGit size={14} /> },
@@ -26,6 +28,8 @@ const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
   { key: "media", label: "Media", icon: <HardDrive size={14} /> },
   { key: "messages", label: "Messages", icon: <Mail size={14} /> },
   { key: "crm", label: "CRM", icon: <PhoneCall size={14} /> },
+  { key: "invoices", label: "Invoices", icon: <FileText size={14} /> },
+  { key: "contracts", label: "Contracts", icon: <ShieldCheck size={14} /> },
   { key: "settings", label: "Settings", icon: <Settings size={14} /> },
 ];
 
@@ -277,6 +281,8 @@ export default function AdminPage() {
               {tab === "media" && <MediaTab token={token} />}
               {tab === "messages" && <MessagesTab token={token} />}
               {tab === "crm" && <CRMTab token={token} />}
+              {tab === "invoices" && <InvoicesTab token={token} />}
+              {tab === "contracts" && <ContractsTab token={token} />}
               {tab === "settings" && config && <SettingsTab config={config} token={token} onRefresh={loadAll} />}
             </div>
           )}

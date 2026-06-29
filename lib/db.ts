@@ -99,6 +99,40 @@ export interface Lead {
   updatedAt: string;
 }
 
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  clientName: string;
+  clientEmail: string;
+  company: string;
+  project: string;
+  service: string;
+  amount: number;
+  currency: string;
+  issueDate: string;
+  dueDate: string;
+  paymentStatus: string;
+  notes: string;
+  fileUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Contract {
+  id: string;
+  contractNumber: string;
+  clientName: string;
+  clientEmail: string;
+  company: string;
+  project: string;
+  status: string;
+  issueDate: string;
+  notes: string;
+  fileUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface StorageFile {
   name: string;
   url: string;
@@ -327,6 +361,104 @@ export async function apiUpdateLead(id: string, updates: Partial<Pick<Lead, "sta
 
 export async function apiDeleteLead(id: string, token: string): Promise<boolean> {
   const res = await fetch("/api/leads", {
+    method: "DELETE",
+    headers: adminHeaders(token),
+    body: JSON.stringify({ id }),
+  });
+  return res.ok;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function rowToInvoice(row: any): Invoice {
+  return {
+    id: row.id,
+    invoiceNumber: row.invoice_number,
+    clientName: row.client_name,
+    clientEmail: row.client_email,
+    company: row.company ?? "",
+    project: row.project ?? "",
+    service: row.service ?? "",
+    amount: row.amount ?? 0,
+    currency: row.currency ?? "USD",
+    issueDate: row.issue_date ?? "",
+    dueDate: row.due_date ?? "",
+    paymentStatus: row.payment_status ?? "Pending",
+    notes: row.notes ?? "",
+    fileUrl: row.file_url ?? "",
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+export async function fetchInvoices(token: string): Promise<Invoice[]> {
+  const res = await fetch("/api/invoices", { headers: adminHeaders(token) });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (data ?? []).map(rowToInvoice);
+}
+
+export async function apiUpdateInvoice(id: string, updates: Partial<Invoice>, token: string): Promise<boolean> {
+  const dbUpdates = {
+    payment_status: updates.paymentStatus,
+    notes: updates.notes,
+  };
+  const res = await fetch("/api/invoices", {
+    method: "PATCH",
+    headers: adminHeaders(token),
+    body: JSON.stringify({ id, ...dbUpdates }),
+  });
+  return res.ok;
+}
+
+export async function apiDeleteInvoice(id: string, token: string): Promise<boolean> {
+  const res = await fetch("/api/invoices", {
+    method: "DELETE",
+    headers: adminHeaders(token),
+    body: JSON.stringify({ id }),
+  });
+  return res.ok;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function rowToContract(row: any): Contract {
+  return {
+    id: row.id,
+    contractNumber: row.contract_number,
+    clientName: row.client_name,
+    clientEmail: row.client_email,
+    company: row.company ?? "",
+    project: row.project ?? "",
+    status: row.status ?? "Draft",
+    issueDate: row.issue_date ?? "",
+    notes: row.notes ?? "",
+    fileUrl: row.file_url ?? "",
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+export async function fetchContracts(token: string): Promise<Contract[]> {
+  const res = await fetch("/api/contracts", { headers: adminHeaders(token) });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (data ?? []).map(rowToContract);
+}
+
+export async function apiUpdateContract(id: string, updates: Partial<Contract>, token: string): Promise<boolean> {
+  const dbUpdates = {
+    status: updates.status,
+    notes: updates.notes,
+  };
+  const res = await fetch("/api/contracts", {
+    method: "PATCH",
+    headers: adminHeaders(token),
+    body: JSON.stringify({ id, ...dbUpdates }),
+  });
+  return res.ok;
+}
+
+export async function apiDeleteContract(id: string, token: string): Promise<boolean> {
+  const res = await fetch("/api/contracts", {
     method: "DELETE",
     headers: adminHeaders(token),
     body: JSON.stringify({ id }),
