@@ -192,6 +192,8 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       const randomCode = "PDFFX-" + Array.from({ length: 10 }, () => codeChars[Math.floor(Math.random() * codeChars.length)]).join("");
       const verificationUrl = `https://www.betterdose.dev/pdffx/${randomCode}`;
 
+      const logoBase64 = await getBase64FromUrl(window.location.origin + "/logo.jpg");
+
       const doc = new jsPDF();
       
       // BetterDose Accent Colors
@@ -204,18 +206,22 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       const formatCurrency = (val: number) => `${Number(val).toFixed(2)} ${currency}`;
 
       // --- SECTION 1: Company Header (Top Left) ---
-      // Logo (Draw vector 'B' icon)
-      doc.setFillColor(37, 99, 235); // BetterDose Blue
-      doc.roundedRect(14, 15, 12, 12, 3, 3, "F");
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(9);
-      doc.text("B", 19, 23, { align: "center" });
+      if (logoBase64) {
+        doc.addImage(logoBase64, "JPEG", 14, 15, 42, 12);
+      } else {
+        // Logo (Draw vector 'B' icon)
+        doc.setFillColor(37, 99, 235); // BetterDose Blue
+        doc.roundedRect(14, 15, 12, 12, 3, 3, "F");
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(9);
+        doc.text("B", 19, 23, { align: "center" });
 
-      doc.setFontSize(22);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(15, 23, 42);
-      doc.text("BetterDose", 29, 24);
+        doc.setFontSize(22);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(15, 23, 42);
+        doc.text("BetterDose", 29, 24);
+      }
 
       doc.setDrawColor(37, 99, 235);
       doc.setLineWidth(0.8);
@@ -334,13 +340,11 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
         ["Project Status:", projectStatus]
       ];
 
-      doc.setFontSize(8);
+      doc.setFontSize(7.5);
       projList.forEach(([lbl, v], idx) => {
-        const rowIdx = idx % 3;
-        const colIdx = Math.floor(idx / 3);
-        const xLabel = colIdx === 0 ? 126 : 160;
-        const xValue = colIdx === 0 ? 144 : 185;
-        const yPos = cardY + 8 + rowIdx * 5.5;
+        const xLabel = 126;
+        const xValue = 160;
+        const yPos = cardY + 5.5 + idx * 4.5;
 
         doc.setFont("helvetica", "normal");
         doc.setTextColor(71, 85, 105);
@@ -350,15 +354,15 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
           const bg = v === "Completed" ? [220, 252, 231] : [254, 243, 199];
           const fg = v === "Completed" ? [22, 101, 52] : [180, 83, 9];
           doc.setFillColor(bg[0], bg[1], bg[2]);
-          doc.roundedRect(xValue - 14, yPos - 3.5, 15, 4.5, 1, 1, "F");
+          doc.roundedRect(xValue, yPos - 3.5, 15, 4.5, 1, 1, "F");
           doc.setFont("helvetica", "bold");
           doc.setTextColor(fg[0], fg[1], fg[2]);
           doc.setFontSize(7);
-          doc.text(v, xValue - 6.5, yPos - 0.5, { align: "center" });
+          doc.text(v, xValue + 7.5, yPos - 0.5, { align: "center" });
         } else {
           doc.setFont("helvetica", "bold");
           doc.setTextColor(15, 23, 42);
-          doc.text(v, xValue - 14, yPos);
+          doc.text(v, xValue, yPos);
         }
       });
 
@@ -602,12 +606,13 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.text("Scan the QR code to view and download this invoice", 42, currentY + 10);
       doc.text("from BetterDose secure document system.", 42, currentY + 13);
 
-      // Padlock / link button
+      // Link button
       doc.setFillColor(15, 23, 42);
-      doc.roundedRect(42, currentY + 16, 68, 6, 1, 1, "F");
+      doc.roundedRect(42, currentY + 16, 70, 6, 1, 1, "F");
       doc.setFont("helvetica", "bold");
+      doc.setFontSize(6.5);
       doc.setTextColor(255, 255, 255);
-      doc.text(`[Padlock] ${verificationUrl}`, 44, currentY + 20.2, { maxWidth: 64 });
+      doc.text(verificationUrl, 44, currentY + 20.2);
 
       // Right Column: Signatures & Stamp
       const sigX = 126;
@@ -645,8 +650,12 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.setTextColor(37, 99, 235);
       doc.text("BETTERDOSE LTD.", sealX, sealY - 4, { align: "center" });
       doc.text("UNITED KINGDOM", sealX, sealY + 6, { align: "center" });
-      doc.setFontSize(10);
-      doc.text("B", sealX, sealY + 1.5, { align: "center" });
+      if (logoBase64) {
+        doc.addImage(logoBase64, "JPEG", sealX - 7, sealY - 2.5, 14, 4);
+      } else {
+        doc.setFontSize(10);
+        doc.text("B", sealX, sealY + 1.5, { align: "center" });
+      }
 
       // Overlap with actual custom stamp if available
       if (stampUrl) {
