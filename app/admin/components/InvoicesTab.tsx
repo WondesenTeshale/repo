@@ -254,15 +254,26 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.text(invoiceNumber, 168, 36.5, { align: "center" });
 
       // Info Table
+      let paymentDetail = "";
+      if (paymentMethod === "PayPal") paymentDetail = "pixelsteamin@gmail.com";
+      else if (paymentMethod === "Wise Transfer") paymentDetail = "@betterdoseltd";
+
       const infoList = [
         ["Invoice Date:", issueDate],
         ["Due Date:", dueDate],
         ["Invoice Status:", paymentStatus],
         ["Currency:", currency],
         ["Payment Method:", paymentMethod],
+      ];
+
+      if (paymentDetail) {
+        infoList.push(["Pay To:", paymentDetail]);
+      }
+
+      infoList.push(
         ["Project Reference:", projectRef],
         ["Purchase Order:", purchaseOrder || "N/A"]
-      ];
+      );
 
       doc.setFontSize(8.5);
       infoList.forEach(([label, val], idx) => {
