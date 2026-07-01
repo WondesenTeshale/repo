@@ -44,10 +44,6 @@ export default function ContractsTab({ token, onRefresh }: Props) {
       doc.setTextColor(30, 64, 175);
       doc.text("BETTERDOSE", 14, 20);
       
-      doc.setFontSize(9);
-      doc.setTextColor(150, 150, 150);
-      doc.text("(formerly Heducate)", 65, 19);
-      
       doc.setFontSize(10);
       doc.setTextColor(100, 100, 100);
       doc.text("hello@betterdose.dev", 14, 28);
