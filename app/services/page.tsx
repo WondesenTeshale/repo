@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Globe, Plug, Zap, Bot, MessageSquare, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -82,8 +83,7 @@ export default function ServicesPage() {
         <div className="relative h-64 md:h-80 w-full">
           <div className="absolute inset-0 bg-gradient-to-b from-[#0f1117]/50 via-transparent to-[#0f1117] z-10" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0f1117]/60 via-transparent to-[#0f1117]/60 z-10" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/services-hero.png" alt="BetterDose Services" className="w-full h-full object-cover object-center" />
+          <Image src="/images/services-hero.png" alt="BetterDose Services" fill className="object-cover object-center" priority />
           <div className="absolute bottom-10 left-6 md:left-12 z-20 max-w-5xl">
             <span className="section-label">Services</span>
             <h1 className="text-display mt-1">What We Can Build For You</h1>

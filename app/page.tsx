@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   Globe,
@@ -83,7 +84,7 @@ export default function HomePage() {
         {/* Abstract Hero Background */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-[#0f1117]/80 via-[#0f1117]/60 to-[#0f1117] z-10" />
-          <img src="/images/hero-bg.png" alt="Hero Background" className="w-full h-full object-cover opacity-50 mix-blend-screen animate-pulse" style={{ animationDuration: '4s' }} />
+          <Image src="/images/hero-bg.png" alt="Hero Background" fill className="object-cover opacity-50 mix-blend-screen animate-pulse" style={{ animationDuration: '4s' }} priority />
         </div>
         <div className="absolute top-40 left-0 w-[500px] h-[500px] bg-[#4f8ef7]/5 rounded-full blur-[120px] -z-10 pointer-events-none" />
         <div className="max-w-5xl mx-auto text-center md:text-left flex flex-col items-center md:items-start relative z-10">
@@ -163,7 +164,7 @@ export default function HomePage() {
             <div className="card border-t-2 border-t-[#4f8ef7] overflow-hidden flex flex-col">
               <div className="h-32 relative w-full border-b border-[#252d3d]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#121620] to-transparent z-10" />
-                <img src="/images/software-dev.png" alt="Software Development" className="w-full h-full object-cover" />
+                <Image src="/images/software-dev.png" alt="Software Development" fill className="object-cover" />
               </div>
               <div className="p-8 flex-1">
                 <div className="w-10 h-10 rounded-lg bg-[#1f2433] border border-[#252d3d] flex items-center justify-center mb-5 text-[#4f8ef7] relative z-20 -mt-12 shadow-lg">
@@ -177,7 +178,7 @@ export default function HomePage() {
             <div className="card border-t-2 border-t-[#34d399] overflow-hidden flex flex-col">
               <div className="h-32 relative w-full border-b border-[#252d3d]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#121620] to-transparent z-10" />
-                <img src="/images/qa-testing.png" alt="QA Testing" className="w-full h-full object-cover" />
+                <Image src="/images/qa-testing.png" alt="QA Testing" fill className="object-cover" />
               </div>
               <div className="p-8 flex-1">
                 <div className="w-10 h-10 rounded-lg bg-[#1f2433] border border-[#252d3d] flex items-center justify-center mb-5 text-[#34d399] relative z-20 -mt-12 shadow-lg">
@@ -191,7 +192,7 @@ export default function HomePage() {
             <div className="card border-t-2 border-t-[#fbbf24] overflow-hidden flex flex-col">
               <div className="h-32 relative w-full border-b border-[#252d3d]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#121620] to-transparent z-10" />
-                <img src="/images/automation.png" alt="Automation" className="w-full h-full object-cover" />
+                <Image src="/images/automation.png" alt="Automation" fill className="object-cover" />
               </div>
               <div className="p-8 flex-1">
                 <div className="w-10 h-10 rounded-lg bg-[#1f2433] border border-[#252d3d] flex items-center justify-center mb-5 text-[#fbbf24] relative z-20 -mt-12 shadow-lg">
@@ -205,7 +206,7 @@ export default function HomePage() {
             <div className="card border-t-2 border-t-[#818cf8] overflow-hidden flex flex-col">
               <div className="h-32 relative w-full border-b border-[#252d3d]">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#121620] to-transparent z-10" />
-                <img src="/images/wordpress.png" alt="WordPress Solutions" className="w-full h-full object-cover" />
+                <Image src="/images/wordpress.png" alt="WordPress Solutions" fill className="object-cover" />
               </div>
               <div className="p-8 flex-1">
                 <div className="w-10 h-10 rounded-lg bg-[#1f2433] border border-[#252d3d] flex items-center justify-center mb-5 text-[#818cf8] relative z-20 -mt-12 shadow-lg">
@@ -312,7 +313,7 @@ export default function HomePage() {
                 Our studio operates on a continuous integration model, driven by team collaboration. We believe great software comes from diverse teams working closely together.
               </p>
               <div className="relative rounded-2xl overflow-hidden border border-[#252d3d] shadow-2xl">
-                <img src="/images/betterdose.jpeg" alt="Team Collaboration" className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity duration-500" />
+                <Image src="/images/betterdose.jpeg" alt="Team Collaboration" width={800} height={450} className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity duration-500" />
                 <div className="absolute bottom-4 left-4 right-4 bg-[#0f1117]/80 backdrop-blur-md border border-[#252d3d] rounded-xl p-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-semibold text-[#e8eaf2]">Studio Sessions</p>

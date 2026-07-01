@@ -1,6 +1,7 @@
 import { fetchTeamMembers, fetchConfig } from "@/lib/db";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Image from "next/image";
 import { GitBranch, Link as LinkIcon, Mail, MapPin, Users } from "lucide-react";
 
 export const revalidate = 60;
@@ -18,8 +19,7 @@ export default async function AboutPage() {
         <div className="relative h-72 md:h-96 w-full">
           <div className="absolute inset-0 bg-gradient-to-b from-[#0f1117]/60 via-transparent to-[#0f1117] z-10" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0f1117]/60 via-transparent to-[#0f1117]/60 z-10" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/about-hero.png" alt="BetterDose team" className="w-full h-full object-cover object-center" />
+          <Image src="/images/about-hero.png" alt="BetterDose team" fill className="object-cover object-center" priority />
           {/* Overlay content */}
           <div className="absolute bottom-10 left-6 md:left-12 z-20 max-w-5xl">
             <span className="section-label">The Team</span>
