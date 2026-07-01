@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { Invoice, fetchInvoices, apiUpdateInvoice, apiDeleteInvoice, InvoiceItem, InvoiceMilestone, PaymentHistoryEntry } from "@/lib/db";
-import { Trash2, FileText, Plus, X, Download, RefreshCw, Upload, Eye, Check } from "lucide-react";
+import { Plus, X, Upload, Trash2, Eye, Download, FileText, CheckCircle2, Copy } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -74,7 +74,10 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
   ]);
   const [deliverables, setDeliverables] = useState<string[]>(["Source Code", "Database & Files", "Deployment", "Testing & Bug Fixes", "Documentation"]);
 
+  const [editingId, setEditingId] = useState<string | null>(null);
+
   const resetForm = useCallback(() => {
+    setEditingId(null);
     const yr = new Date().getFullYear();
     const rand = String(Math.floor(Math.random() * 900) + 100);
     setInvoiceNumber(`INV-${yr}-${rand}`);
@@ -266,7 +269,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       }
 
       const infoList = [
-        ["Invoice Date:", issueDate],
+        ["Invoice Created On:", issueDate],
         ["Due Date:", dueDate],
         ["Invoice Status:", paymentStatus],
         ["Currency:", currency],
@@ -305,7 +308,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       });
 
       // --- SECTION 3: Billed To & Project Information Cards ---
-      const cardY = 88;
+      const cardY = 47 + infoList.length * 5.2 + 8;
       // Billed To Card
       doc.setDrawColor(203, 213, 225);
       doc.setLineWidth(0.4);
@@ -548,6 +551,12 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
       currentY = (doc as any).lastAutoTable.finalY + 8;
 
+      // Ensure there is space for Deliverables & Notes on the current page
+      if (currentY + 45 > 280) {
+        doc.addPage();
+        currentY = 20;
+      }
+
       // --- SECTION 7: Deliverables & Notes side-by-side ---
       // Left: Deliverables Card (X=14 to 102)
       doc.roundedRect(14, currentY + 2, 88, 30, 2, 2, "S");
@@ -594,7 +603,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       currentY += 38;
 
       // Ensure footer space
-      if (currentY > 230) {
+      if (currentY > 260) {
         doc.addPage();
         currentY = 20;
       }
@@ -726,12 +735,9 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       const uploadData = await uploadRes.json();
       
       // 3. Save to Database
-      const saveRes = await fetch("/api/invoices", {
-        method: "POST",
-        headers: { "x-admin-token": token, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          invoice_number: invoiceNumber,
-          client_name: clientName,
+      const payload = {
+        invoice_number: invoiceNumber,
+        client_name: clientName,
           client_email: clientEmail,
           company,
           country,
@@ -758,7 +764,12 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
           stamp_url: stampUrl,
           verification_code: randomCode,
           file_url: uploadData.url
-        })
+      };
+
+      const saveRes = await fetch("/api/invoices", {
+        method: editingId ? "PATCH" : "POST",
+        headers: { "x-admin-token": token, "Content-Type": "application/json" },
+        body: JSON.stringify(editingId ? { id: editingId, ...payload } : payload)
       });
       
       if (!saveRes.ok) throw new Error("Failed to save invoice record");
@@ -773,6 +784,38 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
     } finally {
       setGenerating(false);
     }
+  };
+
+  const editInvoice = (inv: any) => {
+    setEditingId(inv.id);
+    setInvoiceNumber(inv.invoiceNumber);
+    setClientName(inv.clientName);
+    setClientEmail(inv.clientEmail || "");
+    setCompany(inv.company || "");
+    setCountry(inv.country || "");
+    setPhone(inv.phone || "");
+    setProjectRef(inv.projectReference || "");
+    setPurchaseOrder(inv.purchaseOrder || "");
+    setCurrency(inv.currency);
+    setPaymentMethod(inv.paymentMethod || "Wise Transfer");
+    setIssueDate(inv.issueDate.split('T')[0]);
+    setDueDate(inv.dueDate.split('T')[0]);
+    setPaymentStatus(inv.paymentStatus);
+    setNotes(inv.notes || "");
+    setSignatureUrl(inv.signatureUrl || "");
+    setStampUrl(inv.stampUrl || "");
+    
+    const parse = (val: any) => typeof val === "string" ? JSON.parse(val) : (val || []);
+    setItems(parse(inv.items));
+    setMilestones(parse(inv.milestones));
+    setPaymentHistory(parse(inv.paymentHistory));
+    setDeliverables(parse(inv.deliverables));
+    
+    setDiscountPercent(0);
+    setTaxPercent(0);
+    
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const updateStatus = async (id: string, status: string) => {
@@ -1160,6 +1203,10 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
                       <a href={inv.fileUrl} target="_blank" rel="noreferrer" className="btn btn-ghost p-1.5 text-[#4f8ef7] hover:bg-[#4f8ef7]/10" title="Download PDF">
                         <Download size={14} />
                       </a>
+                      <button onClick={() => editInvoice(inv)} className="btn btn-ghost p-1.5 text-orange-400 hover:bg-orange-400/10" title="Edit">
+                        {/* We need to use Edit or Pencil icon. Let's make sure it's imported. If not, use some inline SVG or imported icon. Let's just assume we can import Edit if it's there. Alternatively we can just use text. Wait! There's no Edit icon imported yet. Let's use FileText instead of edit, or add Edit import. */}
+                        <FileText size={14} />
+                      </button>
                       <button onClick={() => deleteInvoice(inv.id)} className="btn btn-ghost p-1.5 text-red-400 hover:bg-red-400/10" title="Delete">
                         <Trash2 size={14} />
                       </button>
