@@ -86,7 +86,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
     setProjectRef(`PRJ-${yr}-053`);
     setPurchaseOrder("N/A");
     setCurrency("USD");
-    setPaymentMethod("Wise Transfer");
+    setPaymentMethod("Multiple Options");
     setIssueDate("2026-07-01");
     setDueDate("2026-07-15");
     setPaymentStatus("Paid");
@@ -253,10 +253,16 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.setTextColor(255, 255, 255);
       doc.text(invoiceNumber, 168, 36.5, { align: "center" });
 
-      // Info Table
-      let paymentDetail = "";
-      if (paymentMethod === "PayPal") paymentDetail = "pixelsteamin@gmail.com";
-      else if (paymentMethod === "Wise Transfer") paymentDetail = "@betterdoseltd";
+      let paymentDetail1 = "";
+      let paymentDetail2 = "";
+      if (paymentMethod === "PayPal") {
+        paymentDetail1 = "pixelsteamin@gmail.com (PayPal)";
+      } else if (paymentMethod === "Wise Transfer") {
+        paymentDetail1 = "@betterdoseltd (Wise)";
+      } else if (paymentMethod === "Multiple Options") {
+        paymentDetail1 = "pixelsteamin@gmail.com (PayPal)";
+        paymentDetail2 = "@betterdoseltd (Wise)";
+      }
 
       const infoList = [
         ["Invoice Date:", issueDate],
@@ -266,9 +272,8 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
         ["Payment Method:", paymentMethod],
       ];
 
-      if (paymentDetail) {
-        infoList.push(["Pay To:", paymentDetail]);
-      }
+      if (paymentDetail1) infoList.push(["Pay To:", paymentDetail1]);
+      if (paymentDetail2) infoList.push(["", paymentDetail2]);
 
       infoList.push(
         ["Project Reference:", projectRef],
@@ -821,6 +826,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
             </div>
             <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Payment Method</label>
               <select className="input w-full" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
+                <option value="Multiple Options">Multiple Options (Client Choice)</option>
                 <option value="Wise Transfer">Wise Transfer</option>
                 <option value="PayPal">PayPal</option>
                 <option value="Bank Transfer">Bank Transfer</option>
