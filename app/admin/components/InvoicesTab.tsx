@@ -9,18 +9,17 @@ interface Props { token: string; onRefresh?: () => void; }
 
 const DELIVERABLES_LIST = [
   "Source Code",
+  "Database & Files",
+  "Deployment",
+  "Testing & Bug Fixes",
   "Documentation",
-  "Database Setup",
-  "Deployment Config",
-  "Bug Fixes",
-  "Testing Report",
   "API Documentation",
-  "Support Agreement"
+  "Support & Maintenance"
 ];
 
 const DEFAULT_ITEM: InvoiceItem = { description: "", quantity: 1, unitPrice: 0, discount: 0, total: 0 };
-const DEFAULT_MILESTONE: InvoiceMilestone = { milestone: "", description: "", completionDate: "", amount: 0, status: "Pending" };
-const DEFAULT_PAYMENT: PaymentHistoryEntry = { date: "", method: "Wise", reference: "", amount: 0, status: "Received" };
+const DEFAULT_MILESTONE: InvoiceMilestone = { milestone: "", description: "", completionDate: "", amount: 0, status: "Paid" };
+const DEFAULT_PAYMENT: PaymentHistoryEntry = { date: "", method: "Wise Transfer", reference: "", amount: 0, status: "Received" };
 
 export default function InvoicesTab({ token, onRefresh }: Props) {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -40,48 +39,77 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
   const [projectRef, setProjectRef] = useState("");
   const [purchaseOrder, setPurchaseOrder] = useState("");
   const [currency, setCurrency] = useState("USD");
-  const [paymentMethod, setPaymentMethod] = useState("Wise");
+  const [paymentMethod, setPaymentMethod] = useState("Wise Transfer");
   const [issueDate, setIssueDate] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [paymentStatus, setPaymentStatus] = useState("Pending");
-  const [notes, setNotes] = useState("Thank you for choosing BetterDose. This invoice represents completed software development services.");
+  const [paymentStatus, setPaymentStatus] = useState("Paid");
+  const [notes, setNotes] = useState("Thank you for choosing BetterDose. We have successfully delivered the project as per the agreed scope and requirements. If you need any support or additional changes, feel free to reach out. We look forward to working with you again.");
   const [taxPercent, setTaxPercent] = useState(0);
   const [discountPercent, setDiscountPercent] = useState(0);
-  
+
+  // Project Info Card fields
+  const [projectName, setProjectName] = useState("");
+  const [projectCategory, setProjectCategory] = useState("Software Development");
+  const [projectStartDate, setProjectStartDate] = useState("");
+  const [projectEndDate, setProjectEndDate] = useState("");
+  const [projectTeam, setProjectTeam] = useState("BetterDose Development Team");
+  const [projectStatus, setProjectStatus] = useState("Completed");
+
   // Custom URLs
   const [signatureUrl, setSignatureUrl] = useState("");
   const [stampUrl, setStampUrl] = useState("");
 
   // Lists
   const [items, setItems] = useState<InvoiceItem[]>([
-    { description: "UI Development", quantity: 1, unitPrice: 1500, discount: 0, total: 1500 },
-    { description: "Backend API Integration", quantity: 1, unitPrice: 2000, discount: 0, total: 2000 }
+    { description: "Software Development - Phase 1\nInitial requirements, UI/UX, core development", quantity: 1, unitPrice: 50, discount: 0, total: 50 },
+    { description: "Software Development - Phase 2\nAdditional features, integrations, optimizations", quantity: 1, unitPrice: 50, discount: 0, total: 50 }
   ]);
-  const [milestones, setMilestones] = useState<InvoiceMilestone[]>([]);
-  const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryEntry[]>([]);
-  const [deliverables, setDeliverables] = useState<string[]>(["Source Code", "Documentation", "Deployment Config"]);
+  const [milestones, setMilestones] = useState<InvoiceMilestone[]>([
+    { milestone: "Phase 1", description: "Software Development", completionDate: "2026-06-07", amount: 50, status: "Paid" },
+    { milestone: "Phase 2", description: "Software Development 2", completionDate: "2026-06-09", amount: 50, status: "Paid" }
+  ]);
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryEntry[]>([
+    { date: "2026-06-07", method: "Wise Transfer", reference: "Software Development", amount: 50, status: "Received" },
+    { date: "2026-06-09", method: "Wise Transfer", reference: "Software Phase 2", amount: 50, status: "Received" }
+  ]);
+  const [deliverables, setDeliverables] = useState<string[]>(["Source Code", "Database & Files", "Deployment", "Testing & Bug Fixes", "Documentation"]);
 
   const resetForm = useCallback(() => {
     const yr = new Date().getFullYear();
-    const rand = String(Math.floor(Math.random() * 90000) + 10000);
+    const rand = String(Math.floor(Math.random() * 900) + 100);
     setInvoiceNumber(`INV-${yr}-${rand}`);
-    setClientName("");
-    setClientEmail("");
+    setClientName("Trying");
+    setClientEmail("Trying email");
     setCompany("");
-    setCountry("");
+    setCountry("N/A");
     setPhone("");
-    setProjectRef(`BD-${yr}-${String(Math.floor(Math.random() * 800) + 100)}`);
-    setPurchaseOrder("");
+    setProjectRef(`PRJ-${yr}-053`);
+    setPurchaseOrder("N/A");
     setCurrency("USD");
-    setPaymentMethod("Wise");
-    setIssueDate(new Date().toISOString().split("T")[0]);
-    setDueDate(new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]);
-    setPaymentStatus("Pending");
-    setNotes("Thank you for choosing BetterDose. This invoice represents completed software development services. Support requests can be sent to contact@betterdose.dev.");
-    setItems([{ description: "Software Development Phase 1", quantity: 1, unitPrice: 3500, discount: 0, total: 3500 }]);
-    setMilestones([]);
-    setPaymentHistory([]);
-    setDeliverables(["Source Code", "Documentation", "Deployment Config"]);
+    setPaymentMethod("Wise Transfer");
+    setIssueDate("2026-07-01");
+    setDueDate("2026-07-15");
+    setPaymentStatus("Paid");
+    setProjectName("Trying");
+    setProjectCategory("Software Development");
+    setProjectStartDate("2026-06-01");
+    setProjectEndDate("2026-06-30");
+    setProjectTeam("BetterDose Development Team");
+    setProjectStatus("Completed");
+    setNotes("Thank you for choosing BetterDose. We have successfully delivered the project as per the agreed scope and requirements. If you need any support or additional changes, feel free to reach out. We look forward to working with you again.");
+    setItems([
+      { description: "Software Development - Phase 1\nInitial requirements, UI/UX, core development", quantity: 1, unitPrice: 50, discount: 0, total: 50 },
+      { description: "Software Development - Phase 2\nAdditional features, integrations, optimizations", quantity: 1, unitPrice: 50, discount: 0, total: 50 }
+    ]);
+    setMilestones([
+      { milestone: "Phase 1", description: "Software Development", completionDate: "2026-06-07", amount: 50, status: "Paid" },
+      { milestone: "Phase 2", description: "Software Development 2", completionDate: "2026-06-09", amount: 50, status: "Paid" }
+    ]);
+    setPaymentHistory([
+      { date: "2026-06-07", method: "Wise Transfer", reference: "Software Development", amount: 50, status: "Received" },
+      { date: "2026-06-09", method: "Wise Transfer", reference: "Software Phase 2", amount: 50, status: "Received" }
+    ]);
+    setDeliverables(["Source Code", "Database & Files", "Deployment", "Testing & Bug Fixes", "Documentation"]);
     setTaxPercent(0);
     setDiscountPercent(0);
     setSignatureUrl("");
@@ -167,278 +195,492 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       const doc = new jsPDF();
       
       // BetterDose Accent Colors
-      const primaryColor = [30, 64, 175]; // Blue
-      const grayColor = [100, 100, 100];
-      const darkColor = [30, 41, 59];
+      const primaryColor = [30, 64, 175]; // Blue (#1e40af)
+      const secondaryColor = [37, 99, 235]; // Blue (#2563eb)
+      const grayColor = [100, 116, 139]; // Slate Gray (#64748b)
+      const darkColor = [15, 23, 42]; // Slate Dark (#0f172a)
 
-      // --- SECTION 1: Company Header ---
-      doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.rect(14, 15, 6, 22, "F"); // Visual blue accent bar next to logo
+      // Helpers
+      const formatCurrency = (val: number) => `${Number(val).toFixed(2)} ${currency}`;
+
+      // --- SECTION 1: Company Header (Top Left) ---
+      // Logo (Draw vector 'B' icon)
+      doc.setFillColor(37, 99, 235); // BetterDose Blue
+      doc.roundedRect(14, 15, 12, 12, 3, 3, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9);
+      doc.text("B", 19, 23, { align: "center" });
 
       doc.setFontSize(22);
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text("BETTERDOSE", 24, 23);
+      doc.setTextColor(15, 23, 42);
+      doc.text("BetterDose", 29, 24);
+
+      doc.setDrawColor(37, 99, 235);
+      doc.setLineWidth(0.8);
+      doc.line(14, 31, 14, 61); // Left bar next to details
 
       doc.setFontSize(9);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.text("BetterDose Ltd.", 24, 29);
-      doc.text("https://betterdose.dev | contact@betterdose.dev", 24, 34);
-
-      // Registered in UK
-      doc.setFontSize(8);
-      doc.text("Registered in the United Kingdom", 24, 39);
-      doc.text("Operating Team: Addis Ababa, Ethiopia", 24, 44);
-
-      // LARGE INVOICE TITLE
-      doc.setFontSize(28);
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text("INVOICE", 140, 26);
-
-      doc.setFontSize(10);
+      doc.setTextColor(15, 23, 42);
+      doc.text("BetterDose Ltd.", 18, 35);
+      
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text(`Invoice ID: ${invoiceNumber}`, 140, 34);
+      doc.setTextColor(51, 65, 85);
+      doc.text(`Website: https://www.betterdose.dev`, 18, 41);
+      doc.text(`Email: hello@betterdose.dev`, 18, 47);
+      doc.text("Registered in the United Kingdom", 18, 53);
+      doc.text("Operating Team: Addis Ababa, Ethiopia", 18, 59);
 
-      // Horizontal Line Divider
-      doc.setDrawColor(226, 232, 240);
-      doc.line(14, 50, 196, 50);
+      // --- SECTION 2: Title & Details Table (Top Right) ---
+      doc.setFontSize(36);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(15, 23, 42);
+      doc.text("INVOICE", 196, 26, { align: "right" });
 
-      // --- SECTION 2: Invoice & Client Info ---
-      // Left Column: Billed To
+      // Invoice ID Pill
+      doc.setFillColor(15, 23, 42);
+      doc.roundedRect(140, 31, 56, 8, 4, 4, "F");
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text("BILLED TO:", 14, 60);
+      doc.setTextColor(255, 255, 255);
+      doc.text(invoiceNumber, 168, 36.5, { align: "center" });
 
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFontSize(11);
-      doc.text(clientName, 14, 66);
-      doc.setFontSize(9);
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      if (company) doc.text(company, 14, 71);
-      doc.text(clientEmail, 14, company ? 76 : 71);
-      if (country || phone) {
-        doc.text(`${country || ""} ${phone ? `| ${phone}` : ""}`, 14, company ? 81 : 76);
-      }
+      // Info Table
+      const infoList = [
+        ["Invoice Date:", issueDate],
+        ["Due Date:", dueDate],
+        ["Invoice Status:", paymentStatus],
+        ["Currency:", currency],
+        ["Payment Method:", paymentMethod],
+        ["Project Reference:", projectRef],
+        ["Purchase Order:", purchaseOrder || "N/A"]
+      ];
 
-      // Right Column: Invoice Metadata
-      const metaY = 60;
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text("Invoice Date:", 115, metaY);
-      doc.setFont("helvetica", "normal");
-      doc.text(issueDate, 150, metaY);
-
-      doc.setFont("helvetica", "bold");
-      doc.text("Due Date:", 115, metaY + 6);
-      doc.setFont("helvetica", "normal");
-      doc.text(dueDate, 150, metaY + 6);
-
-      doc.setFont("helvetica", "bold");
-      doc.text("Payment Method:", 115, metaY + 12);
-      doc.setFont("helvetica", "normal");
-      doc.text(paymentMethod, 150, metaY + 12);
-
-      if (projectRef) {
+      doc.setFontSize(8.5);
+      infoList.forEach(([label, val], idx) => {
+        const y = 47 + idx * 5.2;
         doc.setFont("helvetica", "bold");
-        doc.text("Project Ref:", 115, metaY + 18);
-        doc.setFont("helvetica", "normal");
-        doc.text(projectRef, 150, metaY + 18);
-      }
+        doc.setTextColor(71, 85, 105);
+        doc.text(label, 130, y);
 
-      if (purchaseOrder) {
-        doc.setFont("helvetica", "bold");
-        doc.text("Purchase Order:", 115, metaY + 24);
-        doc.setFont("helvetica", "normal");
-        doc.text(purchaseOrder, 150, metaY + 24);
-      }
+        if (label === "Invoice Status:") {
+          // Status Badge
+          const badgeBg = val === "Paid" ? [220, 252, 231] : [254, 243, 199];
+          const badgeFg = val === "Paid" ? [22, 101, 52] : [180, 83, 9];
+          doc.setFillColor(badgeBg[0], badgeBg[1], badgeBg[2]);
+          doc.roundedRect(165, y - 4, 18, 5, 1, 1, "F");
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(badgeFg[0], badgeFg[1], badgeFg[2]);
+          doc.text(val.toUpperCase(), 174, y - 0.5, { align: "center" });
+        } else {
+          doc.setFont("helvetica", "normal");
+          doc.setTextColor(15, 23, 42);
+          doc.text(val, 165, y);
+        }
+      });
 
-      // Status Badge
-      doc.setFillColor(paymentStatus === "Paid" ? 220 : 254, paymentStatus === "Paid" ? 252 : 243, paymentStatus === "Paid" ? 231 : 199);
-      doc.rect(115, metaY + 28, 79, 7, "F");
+      // --- SECTION 3: Billed To & Project Information Cards ---
+      const cardY = 88;
+      // Billed To Card
+      doc.setDrawColor(203, 213, 225);
+      doc.setLineWidth(0.4);
+      doc.roundedRect(14, cardY, 88, 30, 2, 2, "S");
+      
       doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(37, 99, 235);
+      doc.text("BILLED TO", 14, cardY - 3);
+
+      // Icon box (Billed To)
+      doc.setFillColor(239, 246, 255);
+      doc.roundedRect(18, cardY + 4, 10, 10, 2, 2, "F");
+      // Drawing a little person shape inside icon box
+      doc.setFillColor(37, 99, 235);
+      doc.ellipse(23, 23 + cardY - 12, 1.5, 1.5, "F");
+      doc.roundedRect(21, 23 + cardY - 9, 4, 2, 1, 1, "F");
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9.5);
+      doc.setTextColor(15, 23, 42);
+      doc.text(clientName, 32, cardY + 8);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(71, 85, 105);
+      doc.text(clientEmail, 32, cardY + 13);
+      doc.text(`Country: ${country || "N/A"}`, 32, cardY + 18);
+
+      // Project Info Card
+      doc.roundedRect(108, cardY, 88, 30, 2, 2, "S");
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(37, 99, 235);
+      doc.text("PROJECT INFORMATION", 108, cardY - 3);
+
+      // Icon box (Project Info)
+      doc.setFillColor(239, 246, 255);
+      doc.roundedRect(112, cardY + 4, 10, 10, 2, 2, "F");
+      // Draw simple document/folder vector
+      doc.setDrawColor(37, 99, 235);
+      doc.setLineWidth(0.5);
+      doc.roundedRect(114, cardY + 6, 6, 6, 0.5, 0.5, "S");
+
+      const projList = [
+        ["Project Name:", projectName || clientName],
+        ["Project Category:", projectCategory],
+        ["Project Start Date:", projectStartDate],
+        ["Project Completion Date:", projectEndDate],
+        ["Assigned Team:", projectTeam],
+        ["Project Status:", projectStatus]
+      ];
+
       doc.setFontSize(8);
-      doc.setTextColor(paymentStatus === "Paid" ? 22 : 180, paymentStatus === "Paid" ? 101 : 83, paymentStatus === "Paid" ? 52 : 9);
-      doc.text(`STATUS: ${paymentStatus.toUpperCase()}`, 120, metaY + 33);
+      projList.forEach(([lbl, v], idx) => {
+        const rowIdx = idx % 3;
+        const colIdx = Math.floor(idx / 3);
+        const xLabel = colIdx === 0 ? 126 : 160;
+        const xValue = colIdx === 0 ? 144 : 185;
+        const yPos = cardY + 8 + rowIdx * 5.5;
 
-      // --- SECTION 3: Service Breakdown Table ---
-      const tableBody = items.map(it => [
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(71, 85, 105);
+        doc.text(lbl, xLabel, yPos);
+
+        if (lbl === "Project Status:") {
+          const bg = v === "Completed" ? [220, 252, 231] : [254, 243, 199];
+          const fg = v === "Completed" ? [22, 101, 52] : [180, 83, 9];
+          doc.setFillColor(bg[0], bg[1], bg[2]);
+          doc.roundedRect(xValue - 14, yPos - 3.5, 15, 4.5, 1, 1, "F");
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(fg[0], fg[1], fg[2]);
+          doc.setFontSize(7);
+          doc.text(v, xValue - 6.5, yPos - 0.5, { align: "center" });
+        } else {
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(15, 23, 42);
+          doc.text(v, xValue - 14, yPos);
+        }
+      });
+
+      // --- SECTION 4: Service Table ---
+      const tableHead = [['SERVICE / DESCRIPTION', 'QTY', 'UNIT PRICE', 'TOTAL']];
+      // Format rows for autotable
+      const formattedItems = items.map(it => [
         it.description,
         it.quantity.toString(),
-        `${it.unitPrice.toLocaleString()} ${currency}`,
-        it.discount ? `-${it.discount.toLocaleString()} ${currency}` : "-",
-        `${((it.quantity * it.unitPrice) - (it.discount || 0)).toLocaleString()} ${currency}`
+        formatCurrency(it.unitPrice),
+        formatCurrency(it.quantity * it.unitPrice - (it.discount || 0))
       ]);
 
+      // Add Subtotal / Discount rows directly inside table styling
+      formattedItems.push(
+        ["", "", "Subtotal", formatCurrency(subtotal)],
+        ["", "", "Discount", formatCurrency(discountAmount)],
+        ["", "", "TOTAL DUE", formatCurrency(totalDue)]
+      );
+
       autoTable(doc, {
-        startY: 105,
-        head: [['Line Items / Services', 'Qty', 'Unit Price', 'Discount', 'Total']],
-        body: tableBody,
+        startY: cardY + 36,
+        head: tableHead,
+        body: formattedItems,
         theme: 'striped',
-        headStyles: { fillColor: primaryColor as [number, number, number], fontSize: 9, fontStyle: 'bold' },
-        bodyStyles: { fontSize: 8, textColor: darkColor as [number, number, number] },
+        headStyles: { fillColor: [15, 23, 42], fontSize: 8, fontStyle: 'bold' },
+        bodyStyles: { fontSize: 8, textColor: [15, 23, 42] },
         columnStyles: {
-          0: { cellWidth: 80 },
+          0: { cellWidth: 100 },
           1: { cellWidth: 15, halign: 'center' },
-          2: { cellWidth: 30, halign: 'right' },
-          3: { cellWidth: 25, halign: 'right' },
-          4: { cellWidth: 32, halign: 'right' }
+          2: { cellWidth: 35, halign: 'right' },
+          3: { cellWidth: 32, halign: 'right' }
+        },
+        didParseCell: (dataCell) => {
+          // Style the summary rows uniquely
+          const rowIndex = dataCell.row.index;
+          if (rowIndex >= items.length) {
+            dataCell.cell.styles.fontStyle = 'bold';
+            dataCell.cell.styles.fillColor = [255, 255, 255];
+            if (dataCell.cell.text[0].includes("TOTAL DUE")) {
+              dataCell.cell.styles.fillColor = [239, 246, 255];
+              dataCell.cell.styles.textColor = [37, 99, 235];
+            }
+          }
         }
       });
 
       let currentY = (doc as any).lastAutoTable.finalY + 10;
 
-      // --- SECTION 4: Milestones ---
-      if (milestones.length > 0) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-        doc.text("PROJECT MILESTONES & PHASES", 14, currentY);
-        
-        const milestoneBody = milestones.map(m => [
-          m.milestone,
-          m.description || "N/A",
-          m.completionDate || "N/A",
-          `${Number(m.amount).toLocaleString()} ${currency}`,
-          m.status
-        ]);
+      // --- SECTION 5: Milestones & Payment Summary side-by-side ---
+      // We will define a clean boundary logic. A4 total width is 210, usable is 196.
+      // Left side: X=14 to 102. Right side: X=108 to 196.
+      const sideY = currentY;
 
-        autoTable(doc, {
-          startY: currentY + 3,
-          head: [['Milestone', 'Description', 'Target Date', 'Amount', 'Status']],
-          body: milestoneBody,
-          theme: 'grid',
-          headStyles: { fillColor: [71, 85, 105], fontSize: 8 },
-          bodyStyles: { fontSize: 8 }
-        });
-        currentY = (doc as any).lastAutoTable.finalY + 10;
-      }
+      // Left Column: Milestone Payments
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(37, 99, 235);
+      doc.text("MILESTONE PAYMENTS", 14, sideY);
 
-      // --- SECTION 5: Deliverables Checklist ---
-      if (deliverables.length > 0 && currentY < 230) {
-        doc.setFontSize(9);
+      const milestoneBody = milestones.map(m => [
+        m.milestone,
+        m.description || "N/A",
+        m.completionDate || "N/A",
+        formatCurrency(m.amount),
+        m.status
+      ]);
+
+      autoTable(doc, {
+        startY: sideY + 2,
+        margin: { left: 14, right: 108 },
+        head: [['MILESTONE', 'DESCRIPTION', 'DUE DATE', 'AMOUNT', 'STATUS']],
+        body: milestoneBody,
+        theme: 'grid',
+        headStyles: { fillColor: [71, 85, 105], fontSize: 7, fontStyle: 'bold' },
+        bodyStyles: { fontSize: 7.5 },
+        columnStyles: {
+          0: { cellWidth: 15 },
+          1: { cellWidth: 25 },
+          2: { cellWidth: 16 },
+          3: { cellWidth: 16, halign: 'right' },
+          4: { cellWidth: 16, halign: 'center' }
+        },
+        didParseCell: (dataCell) => {
+          // Format PAID badges in cell render
+          if (dataCell.column.index === 4 && dataCell.cell.text[0] === "Paid") {
+            dataCell.cell.styles.textColor = [22, 101, 52];
+            dataCell.cell.styles.fontStyle = 'bold';
+          }
+        }
+      });
+
+      // Right Column: Payment Summary Box
+      doc.setDrawColor(203, 213, 225);
+      doc.roundedRect(108, sideY + 2, 88, 30, 2, 2, "S");
+      
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(37, 99, 235);
+      doc.text("PAYMENT SUMMARY", 108, sideY);
+
+      const summList = [
+        ["Subtotal", formatCurrency(subtotal)],
+        ["Discount", `-${formatCurrency(discountAmount)}`],
+        ["Tax (0%)", "0.00 USD"],
+        ["Amount Paid", formatCurrency(amountPaid)],
+        ["Remaining Balance", formatCurrency(remainingBalance)]
+      ];
+
+      doc.setFontSize(8);
+      summList.forEach(([lbl, val], idx) => {
+        const y = sideY + 7 + idx * 4.2;
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(71, 85, 105);
+        doc.text(lbl, 112, y);
+
+        if (lbl === "Amount Paid") doc.setTextColor(22, 101, 52);
         doc.setFont("helvetica", "bold");
-        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-        doc.text("DELIVERABLES INCLUDED", 14, currentY);
+        doc.text(val, 192, y, { align: "right" });
+      });
+
+      // Total Due Banner inside summary box
+      doc.setFillColor(15, 23, 42);
+      doc.roundedRect(108, sideY + 24, 88, 8, 1, 1, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(255, 255, 255);
+      doc.text("TOTAL DUE", 112, sideY + 29.5);
+      doc.text(formatCurrency(totalDue), 192, sideY + 29.5, { align: "right" });
+
+      currentY = Math.max((doc as any).lastAutoTable.finalY || 0, sideY + 36) + 6;
+
+      // --- SECTION 6: Payment History ---
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(37, 99, 235);
+      doc.text("PAYMENT HISTORY", 14, currentY);
+
+      const historyBody = paymentHistory.map(p => [
+        p.date,
+        p.method,
+        p.reference || "N/A",
+        formatCurrency(p.amount),
+        p.status
+      ]);
+
+      autoTable(doc, {
+        startY: currentY + 2,
+        head: [['DATE', 'METHOD', 'REFERENCE / TRANSACTION ID', 'AMOUNT', 'STATUS']],
+        body: historyBody,
+        theme: 'grid',
+        headStyles: { fillColor: [71, 85, 105], fontSize: 7, fontStyle: 'bold' },
+        bodyStyles: { fontSize: 7.5 },
+        columnStyles: {
+          0: { cellWidth: 25 },
+          1: { cellWidth: 35 },
+          2: { cellWidth: 70 },
+          3: { cellWidth: 28, halign: 'right' },
+          4: { cellWidth: 24, halign: 'center' }
+        },
+        didParseCell: (dataCell) => {
+          if (dataCell.column.index === 4 && dataCell.cell.text[0] === "Received") {
+            dataCell.cell.styles.textColor = [22, 101, 52];
+            dataCell.cell.styles.fontStyle = 'bold';
+          }
+        }
+      });
+
+      currentY = (doc as any).lastAutoTable.finalY + 8;
+
+      // --- SECTION 7: Deliverables & Notes side-by-side ---
+      // Left: Deliverables Card (X=14 to 102)
+      doc.roundedRect(14, currentY + 2, 88, 30, 2, 2, "S");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(37, 99, 235);
+      doc.text("DELIVERABLES", 14, currentY);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(15, 23, 42);
+      deliverables.slice(0, 5).forEach((d, idx) => {
+        const y = currentY + 7 + idx * 4.5;
+        doc.setFillColor(34, 197, 94); // green
+        doc.roundedRect(18, y - 2.5, 3, 3, 0.5, 0.5, "F"); // checked box
+        // Drawing a checkmark symbol inside
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(5);
+        doc.text("V", 19.5, y - 0.5, { align: "center" });
 
         doc.setFont("helvetica", "normal");
-        doc.setFontSize(8);
-        doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
+        doc.setFontSize(7.5);
+        doc.setTextColor(15, 23, 42);
+        doc.text(d, 24, y);
+      });
 
-        const checklistCols = 2;
-        deliverables.forEach((item, idx) => {
-          const col = idx % checklistCols;
-          const row = Math.floor(idx / checklistCols);
-          const xPos = 14 + col * 90;
-          const yPos = currentY + 5 + row * 5;
-          doc.text(`[X]  ${item}`, xPos, yPos);
-        });
+      // Right: Notes Card (X=108 to 196)
+      doc.setFillColor(248, 250, 252);
+      doc.roundedRect(108, currentY + 2, 88, 30, 2, 2, "F");
+      doc.setDrawColor(203, 213, 225);
+      doc.roundedRect(108, currentY + 2, 88, 30, 2, 2, "S");
 
-        currentY += Math.ceil(deliverables.length / checklistCols) * 5 + 10;
-      }
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(37, 99, 235);
+      doc.text("NOTES", 108, currentY);
 
-      // Ensure space for totals and verification footer
-      if (currentY > 210) {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(71, 85, 105);
+      doc.text(notes, 112, currentY + 7, { maxWidth: 80 });
+
+      currentY += 38;
+
+      // Ensure footer space
+      if (currentY > 230) {
         doc.addPage();
         currentY = 20;
       }
 
-      // --- SECTION 6: Payment Summary & Notes ---
-      const summaryY = currentY;
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text("PAYMENT SUMMARY", 120, summaryY);
+      // --- SECTION 8: Verification, Stamp & Circular Seal ---
+      // Left Column: Online Verification Card
+      doc.setFillColor(248, 250, 252);
+      doc.roundedRect(14, currentY, 100, 26, 2, 2, "F");
+      doc.setDrawColor(226, 232, 240);
+      doc.roundedRect(14, currentY, 100, 26, 2, 2, "S");
 
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFontSize(8);
-
-      const totals = [
-        ["Subtotal:", `${subtotal.toLocaleString()} ${currency}`],
-        ["Discount:", `-${discountAmount.toLocaleString()} ${currency}`],
-        ["Tax Amount:", `${taxAmount.toLocaleString()} ${currency}`],
-        ["Amount Paid:", `-${amountPaid.toLocaleString()} ${currency}`],
-        ["TOTAL DUE:", `${totalDue.toLocaleString()} ${currency}`],
-        ["REMAINING BALANCE:", `${remainingBalance.toLocaleString()} ${currency}`]
-      ];
-
-      totals.forEach((t, i) => {
-        const isTotal = t[0].includes("TOTAL") || t[0].includes("BALANCE");
-        doc.setFont("helvetica", isTotal ? "bold" : "normal");
-        if (isTotal) doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-        else doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-
-        doc.text(t[0], 120, summaryY + 6 + i * 5);
-        doc.text(t[1], 196, summaryY + 6 + i * 5, { align: "right" });
-      });
-
-      // Left Column: Notes & Thank you
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text("NOTES & INSTRUCTIONS", 14, summaryY);
-
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.setFontSize(8);
-      doc.text(notes, 14, summaryY + 6, { maxWidth: 95 });
-
-      // --- SECTION 7: QR Code Verification (Bottom Left) ---
-      const qrY = 240;
+      // QR Code
       const qrApiUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(verificationUrl)}`;
       const qrBase64 = await getBase64FromUrl(qrApiUrl);
-
       if (qrBase64) {
-        doc.addImage(qrBase64, "PNG", 14, qrY, 20, 20);
+        doc.addImage(qrBase64, "PNG", 18, currentY + 3, 20, 20);
       }
-      doc.setFontSize(7);
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.setFont("helvetica", "bold");
-      doc.text("Verify this invoice online", 38, qrY + 4);
-      doc.setFont("helvetica", "normal");
-      doc.text("Scan the QR code or visit", 38, qrY + 8);
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text(`betterdose.dev/pdffx/${randomCode}`, 38, qrY + 12);
 
-      // --- SECTION 8: Signatures & Stamp (Bottom Right) ---
-      const sigX = 135;
-      const sigY = 240;
-      
-      // Line for signature
-      doc.setDrawColor(200, 200, 200);
-      doc.line(sigX, sigY + 10, sigX + 55, sigY + 10);
-      
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(8);
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFont("helvetica", "bold");
-      doc.text("Nebiyu Muluadam", sigX, sigY + 14);
+      doc.setTextColor(37, 99, 235);
+      doc.text("VIEW / VERIFY THIS INVOICE", 42, currentY + 6);
       doc.setFont("helvetica", "normal");
       doc.setFontSize(7);
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.text("Founder & Lead Software Engineer", sigX, sigY + 18);
-      doc.text("BetterDose Ltd.", sigX, sigY + 21);
+      doc.setTextColor(71, 85, 105);
+      doc.text("Scan the QR code to view and download this invoice", 42, currentY + 10);
+      doc.text("from BetterDose secure document system.", 42, currentY + 13);
 
-      // If user uploaded custom signature image
-      if (signatureUrl) {
-        const sigBase64 = await getBase64FromUrl(signatureUrl);
-        if (sigBase64) {
-          doc.addImage(sigBase64, "PNG", sigX + 5, sigY - 10, 45, 18);
-        }
-      }
+      // Padlock / link button
+      doc.setFillColor(15, 23, 42);
+      doc.roundedRect(42, currentY + 16, 68, 6, 1, 1, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(255, 255, 255);
+      doc.text(`[Padlock] ${verificationUrl}`, 44, currentY + 20.2, { maxWidth: 64 });
 
-      // If user uploaded company stamp
+      // Right Column: Signatures & Stamp
+      const sigX = 126;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.setTextColor(37, 99, 235);
+      doc.text("Authorized By", sigX, currentY + 3);
+
+      // Signature line
+      doc.setDrawColor(203, 213, 225);
+      doc.setLineWidth(0.4);
+      doc.line(sigX, currentY + 14, sigX + 38, currentY + 14);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(15, 23, 42);
+      doc.text("Nebiyu Muluadam", sigX, currentY + 18);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(100, 116, 139);
+      doc.text("Founder & Lead Developer", sigX, currentY + 22);
+      doc.text("BetterDose Ltd.", sigX, currentY + 25);
+
+      // Circular vector seal (drawn if no custom image is uploaded)
+      const sealX = 182;
+      const sealY = currentY + 13;
+      doc.setDrawColor(37, 99, 235);
+      doc.setLineWidth(0.8);
+      doc.ellipse(sealX, sealY, 11, 11, "S");
+      doc.setLineWidth(0.3);
+      doc.ellipse(sealX, sealY, 9.5, 9.5, "S");
+      
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(4.5);
+      doc.setTextColor(37, 99, 235);
+      doc.text("BETTERDOSE LTD.", sealX, sealY - 4, { align: "center" });
+      doc.text("UNITED KINGDOM", sealX, sealY + 6, { align: "center" });
+      doc.setFontSize(10);
+      doc.text("B", sealX, sealY + 1.5, { align: "center" });
+
+      // Overlap with actual custom stamp if available
       if (stampUrl) {
         const stampBase64 = await getBase64FromUrl(stampUrl);
         if (stampBase64) {
-          doc.addImage(stampBase64, "PNG", sigX - 35, sigY - 12, 28, 28);
+          doc.addImage(stampBase64, "PNG", sealX - 11, sealY - 11, 22, 22);
         }
       }
+
+      // Overlap with custom signature if available
+      if (signatureUrl) {
+        const sigBase64 = await getBase64FromUrl(signatureUrl);
+        if (sigBase64) {
+          doc.addImage(sigBase64, "PNG", sigX, currentY + 2, 38, 11);
+        }
+      }
+
+      // --- SECTION 9: Bottom Footer Bar ---
+      // Fill full width bottom background
+      doc.setFillColor(15, 23, 42); // Navy
+      doc.rect(0, 278, 210, 19, "F");
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(255, 255, 255);
+      
+      doc.text("BetterDose Ltd.", 14, 285);
+      doc.text("Registered in the United Kingdom", 60, 285);
+      doc.text("Email: hello@betterdose.dev", 116, 285);
+      doc.text("Website: https://www.betterdose.dev", 158, 285);
+
+      doc.setTextColor(100, 116, 139);
+      doc.setFontSize(7);
+      doc.text("© 2026 BetterDose Ltd. All rights reserved.", 105, 292, { align: "center" });
 
       // Output Blob
       const pdfBlob = doc.output("blob");
@@ -559,13 +801,39 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
             </div>
             <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Payment Method</label>
               <select className="input w-full" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
-                <option value="Wise">Wise</option>
+                <option value="Wise Transfer">Wise Transfer</option>
                 <option value="PayPal">PayPal</option>
                 <option value="Bank Transfer">Bank Transfer</option>
               </select>
             </div>
             <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Issue Date</label><input type="date" className="input w-full" value={issueDate} onChange={e => setIssueDate(e.target.value)} /></div>
             <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Due Date</label><input type="date" className="input w-full" value={dueDate} onChange={e => setDueDate(e.target.value)} /></div>
+            <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Payment Status</label>
+              <select className="input w-full" value={paymentStatus} onChange={e => setPaymentStatus(e.target.value)}>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+                <option value="Overdue">Overdue</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Project Details */}
+          <div className="border-t border-[#252d3d] pt-6 mb-6">
+            <h4 className="text-xs font-bold text-[#e8eaf2] uppercase tracking-wider mb-4">Project Information Card</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Project Name</label><input type="text" className="input w-full" value={projectName} onChange={e => setProjectName(e.target.value)} /></div>
+              <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Category</label><input type="text" className="input w-full" value={projectCategory} onChange={e => setProjectCategory(e.target.value)} /></div>
+              <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Start Date</label><input type="date" className="input w-full" value={projectStartDate} onChange={e => setProjectStartDate(e.target.value)} /></div>
+              <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Completion Date</label><input type="date" className="input w-full" value={projectEndDate} onChange={e => setProjectEndDate(e.target.value)} /></div>
+              <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Assigned Team</label><input type="text" className="input w-full" value={projectTeam} onChange={e => setProjectTeam(e.target.value)} /></div>
+              <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Project Status</label>
+                <select className="input w-full" value={projectStatus} onChange={e => setProjectStatus(e.target.value)}>
+                  <option value="Completed">Completed</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Testing">Testing</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           {/* Line Items Breakdown */}
@@ -579,8 +847,8 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
             {items.map((item, idx) => (
               <div key={idx} className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-3 items-end">
                 <div className="md:col-span-2">
-                  <label className="text-[9px] text-[#556080] block mb-1">Description</label>
-                  <input type="text" className="input w-full" value={item.description} onChange={e => {
+                  <label className="text-[9px] text-[#556080] block mb-1">Description (Supports newlines)</label>
+                  <textarea className="input w-full" rows={2} value={item.description} onChange={e => {
                     const newItems = [...items];
                     newItems[idx].description = e.target.value;
                     setItems(newItems);
@@ -716,7 +984,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
                     newP[idx].method = e.target.value;
                     setPaymentHistory(newP);
                   }}>
-                    <option value="Wise">Wise</option>
+                    <option value="Wise Transfer">Wise Transfer</option>
                     <option value="PayPal">PayPal</option>
                     <option value="Bank Transfer">Bank Transfer</option>
                   </select>
