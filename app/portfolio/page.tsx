@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 export const metadata = { title: "Portfolio — BetterDose", description: "Software projects built by the BetterDose development team." };
 
 function isVideo(url: string) {

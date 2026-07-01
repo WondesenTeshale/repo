@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { GitBranch, Link as LinkIcon, Mail, MapPin, Users } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 export const metadata = { title: "About — BetterDose", description: "Meet the BetterDose development team." };
 
 export default async function AboutPage() {

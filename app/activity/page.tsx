@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Activity, GitCommit, Clock, Layers } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 export const metadata = { title: "Activity — BetterDose", description: "Recent development activity from the BetterDose team." };
 
 const statusColor: Record<string, string> = {
