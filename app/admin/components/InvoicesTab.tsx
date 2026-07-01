@@ -225,7 +225,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
       doc.setDrawColor(37, 99, 235);
       doc.setLineWidth(0.8);
-      doc.line(14, 31, 14, 61); // Left bar next to details
+      doc.line(14, 31, 14, 67); // Left bar next to details
 
       doc.setFontSize(9);
       doc.setFont("helvetica", "bold");
@@ -235,9 +235,10 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.setFont("helvetica", "normal");
       doc.setTextColor(51, 65, 85);
       doc.text(`Website: https://www.betterdose.dev`, 18, 41);
-      doc.text(`Email: hello@betterdose.dev`, 18, 47);
-      doc.text("Registered in the United Kingdom", 18, 53);
-      doc.text("Operating Team: Addis Ababa, Ethiopia", 18, 59);
+      doc.text(`Email: contact@betterdose.dev`, 18, 47);
+      doc.text(`Phone: +44 7460 993797 / +251 976 046 482`, 18, 53);
+      doc.text("Registered in the United Kingdom", 18, 59);
+      doc.text("Operating Team: Addis Ababa, Ethiopia", 18, 65);
 
       // --- SECTION 2: Title & Details Table (Top Right) ---
       doc.setFontSize(36);
@@ -699,9 +700,9 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.setTextColor(255, 255, 255);
       
       doc.text("BetterDose Ltd.", 14, 285);
-      doc.text("Registered in the United Kingdom", 60, 285);
-      doc.text("Email: hello@betterdose.dev", 116, 285);
-      doc.text("Website: https://www.betterdose.dev", 158, 285);
+      doc.text("Registered in the United Kingdom", 55, 285);
+      doc.text("Email: contact@betterdose.dev", 108, 285);
+      doc.text("Website: https://www.betterdose.dev", 154, 285);
 
       doc.setTextColor(100, 116, 139);
       doc.setFontSize(7);
