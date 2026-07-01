@@ -259,13 +259,16 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
       let paymentDetail1 = "";
       let paymentDetail2 = "";
+      let paymentDetail3 = "";
       if (paymentMethod === "PayPal") {
         paymentDetail1 = "pixelsteamin@gmail.com (PayPal)";
       } else if (paymentMethod === "Wise Transfer") {
-        paymentDetail1 = "@betterdoseltd (Wise)";
+        paymentDetail1 = "fikirkabe@gmail.com (Wise Email)";
+        paymentDetail2 = "@betterdoseltd (Wise Tag)";
       } else if (paymentMethod === "Multiple Options") {
         paymentDetail1 = "pixelsteamin@gmail.com (PayPal)";
-        paymentDetail2 = "@betterdoseltd (Wise)";
+        paymentDetail2 = "fikirkabe@gmail.com (Wise Email)";
+        paymentDetail3 = "@betterdoseltd (Wise Tag)";
       }
 
       const infoList = [
@@ -278,6 +281,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
       if (paymentDetail1) infoList.push(["Pay To:", paymentDetail1]);
       if (paymentDetail2) infoList.push(["", paymentDetail2]);
+      if (paymentDetail3) infoList.push(["", paymentDetail3]);
 
       infoList.push(
         ["Project Reference:", projectRef],
