@@ -26,9 +26,14 @@ export default function Footer() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/logo.jpg" alt="BetterDose Logo" className="w-full h-full object-cover" />
               </div>
-              <span className="font-semibold text-[#e8eaf2] text-sm font-mono">
-                {config.businessName}
-              </span>
+              <div className="flex flex-col">
+                <span className="font-semibold text-[#e8eaf2] text-sm font-mono leading-tight">
+                  {config.businessName}
+                </span>
+                <span className="text-[9px] text-[#556080] leading-none">
+                  (formerly Heducate)
+                </span>
+              </div>
             </div>
             <p className="text-xs text-[#8b92a9] leading-relaxed max-w-sm mb-4">
               Software development and digital services studio operated by {config.ownerName} and His Team of developers and testers. Registered in the United Kingdom, operating from {config.address}.

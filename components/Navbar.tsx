@@ -49,9 +49,14 @@ export default function Navbar() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.jpg" alt="BetterDose Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="font-semibold text-[#e8eaf2] text-sm tracking-tight">
-            BetterDose
-          </span>
+          <div className="flex flex-col">
+            <span className="font-semibold text-[#e8eaf2] text-sm tracking-tight leading-tight">
+              BetterDose
+            </span>
+            <span className="text-[9px] text-[#556080] leading-none">
+              (formerly Heducate)
+            </span>
+          </div>
         </Link>
 
         {/* Desktop links */}
