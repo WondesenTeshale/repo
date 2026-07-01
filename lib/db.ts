@@ -99,23 +99,77 @@ export interface Lead {
   updatedAt: string;
 }
 
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  discount: number;
+  total: number;
+}
+
+export interface InvoiceMilestone {
+  milestone: string;
+  description: string;
+  completionDate: string;
+  amount: number;
+  status: string;
+}
+
+export interface PaymentHistoryEntry {
+  date: string;
+  method: string;
+  reference: string;
+  amount: number;
+  status: string;
+}
+
 export interface Invoice {
   id: string;
   invoiceNumber: string;
   clientName: string;
   clientEmail: string;
   company: string;
-  project: string;
-  service: string;
-  amount: number;
+  country: string;
+  phone: string;
+  projectReference: string;
+  purchaseOrder: string;
   currency: string;
+  paymentMethod: string;
   issueDate: string;
   dueDate: string;
   paymentStatus: string;
+  items: InvoiceItem[];
+  milestones: InvoiceMilestone[];
+  paymentHistory: PaymentHistoryEntry[];
+  deliverables: string[];
+  subtotal: number;
+  discount: number;
+  tax: number;
+  amountPaid: number;
+  remainingBalance: number;
+  totalDue: number;
   notes: string;
+  signatureUrl: string;
+  stampUrl: string;
+  verificationCode: string;
   fileUrl: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ContractMilestone {
+  milestone: string;
+  description: string;
+  completionDate: string;
+  amount: number;
+  status: string;
+}
+
+export interface ContractPaymentSchedule {
+  phase: string;
+  amount: number;
+  dueDate: string;
+  status: string;
 }
 
 export interface Contract {
@@ -127,8 +181,16 @@ export interface Contract {
   project: string;
   status: string;
   issueDate: string;
+  scopeOfWork: string;
+  milestones: ContractMilestone[];
+  deliverables: string[];
+  paymentSchedule: ContractPaymentSchedule[];
+  governingLaw: string;
   notes: string;
   fileUrl: string;
+  signatureUrl: string;
+  stampUrl: string;
+  verificationCode: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -376,14 +438,29 @@ export function rowToInvoice(row: any): Invoice {
     clientName: row.client_name,
     clientEmail: row.client_email,
     company: row.company ?? "",
-    project: row.project ?? "",
-    service: row.service ?? "",
-    amount: row.amount ?? 0,
+    country: row.country ?? "",
+    phone: row.phone ?? "",
+    projectReference: row.project_reference ?? "",
+    purchaseOrder: row.purchase_order ?? "",
     currency: row.currency ?? "USD",
+    paymentMethod: row.payment_method ?? "Wise",
     issueDate: row.issue_date ?? "",
     dueDate: row.due_date ?? "",
     paymentStatus: row.payment_status ?? "Pending",
+    items: Array.isArray(row.items) ? row.items : [],
+    milestones: Array.isArray(row.milestones) ? row.milestones : [],
+    paymentHistory: Array.isArray(row.payment_history) ? row.payment_history : [],
+    deliverables: Array.isArray(row.deliverables) ? row.deliverables : [],
+    subtotal: Number(row.subtotal ?? 0),
+    discount: Number(row.discount ?? 0),
+    tax: Number(row.tax ?? 0),
+    amountPaid: Number(row.amount_paid ?? 0),
+    remainingBalance: Number(row.remaining_balance ?? 0),
+    totalDue: Number(row.total_due ?? 0),
     notes: row.notes ?? "",
+    signatureUrl: row.signature_url ?? "",
+    stampUrl: row.stamp_url ?? "",
+    verificationCode: row.verification_code ?? "",
     fileUrl: row.file_url ?? "",
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -430,8 +507,16 @@ export function rowToContract(row: any): Contract {
     project: row.project ?? "",
     status: row.status ?? "Draft",
     issueDate: row.issue_date ?? "",
+    scopeOfWork: row.scope_of_work ?? "",
+    milestones: Array.isArray(row.milestones) ? row.milestones : [],
+    deliverables: Array.isArray(row.deliverables) ? row.deliverables : [],
+    paymentSchedule: Array.isArray(row.payment_schedule) ? row.payment_schedule : [],
+    governingLaw: row.governing_law ?? "United Kingdom",
     notes: row.notes ?? "",
     fileUrl: row.file_url ?? "",
+    signatureUrl: row.signature_url ?? "",
+    stampUrl: row.stamp_url ?? "",
+    verificationCode: row.verification_code ?? "",
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };

@@ -35,13 +35,18 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   if (!checkAuth(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await req.json();
-  const { id, payment_status, notes } = body;
+  const { id, ...updates } = body;
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
-  const update: Record<string, string> = { updated_at: new Date().toISOString() };
-  if (payment_status !== undefined) update.payment_status = payment_status;
-  if (notes !== undefined) update.notes = notes;
+  
+  updates.updated_at = new Date().toISOString();
+  
   const { data, error } = await supabaseAdmin
-    .from("invoices").update(update).eq("id", id).select().single();
+    .from("invoices")
+    .update(updates)
+    .eq("id", id)
+    .select()
+    .single();
+    
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
