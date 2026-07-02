@@ -188,17 +188,30 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
     }
   };
 
-  const generatePDF = async () => {
+  const handleSave = async (generatePdf: boolean) => {
     setGenerating(true);
     try {
-      // 1. Generate Verification Code
-      const codeChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const randomCode = "PDFFX-" + Array.from({ length: 10 }, () => codeChars[Math.floor(Math.random() * codeChars.length)]).join("");
-      const verificationUrl = `https://www.betterdose.dev/pdffx/${randomCode}`;
+      let finalVerificationCode = "";
+      let finalFileUrl = "";
 
-      const logoBase64 = await getBase64FromUrl(window.location.origin + "/logo.jpg");
+      if (editingId) {
+        const existingInv = invoices.find(i => i.id === editingId);
+        if (existingInv) {
+          finalVerificationCode = existingInv.verificationCode;
+          finalFileUrl = existingInv.fileUrl || "";
+        }
+      } 
+      
+      if (!finalVerificationCode) {
+        const codeChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        finalVerificationCode = "PDFFX-" + Array.from({ length: 10 }, () => codeChars[Math.floor(Math.random() * codeChars.length)]).join("");
+      }
 
-      const doc = new jsPDF();
+      if (generatePdf) {
+        const verificationUrl = `https://www.betterdose.dev/pdffx/${finalVerificationCode}`;
+        const logoBase64 = await getBase64FromUrl(window.location.origin + "/logo.jpg");
+
+        const doc = new jsPDF();
       
       // BetterDose Accent Colors
       const primaryColor = [30, 64, 175]; // Blue (#1e40af)
@@ -739,8 +752,10 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
         body: formData
       });
       
-      if (!uploadRes.ok) throw new Error("Failed to upload PDF");
-      const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) throw new Error("Failed to upload PDF");
+        const uploadData = await uploadRes.json();
+        finalFileUrl = uploadData.url;
+      }
       
       // 3. Save to Database
       const payload = {
@@ -770,8 +785,8 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
           notes,
           signature_url: signatureUrl,
           stamp_url: stampUrl,
-          verification_code: randomCode,
-          file_url: uploadData.url
+          verification_code: finalVerificationCode,
+          file_url: finalFileUrl
       };
 
       const saveRes = await fetch("/api/invoices", {
@@ -819,8 +834,13 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
     setPaymentHistory(parse(inv.paymentHistory));
     setDeliverables(parse(inv.deliverables));
     
-    setDiscountPercent(0);
-    setTaxPercent(0);
+    const originalSubtotal = inv.subtotal || 0;
+    const discountPer = originalSubtotal ? ((inv.discount || 0) / originalSubtotal) * 100 : 0;
+    const taxable = originalSubtotal - (inv.discount || 0);
+    const taxPer = taxable ? ((inv.tax || 0) / taxable) * 100 : 0;
+    
+    setDiscountPercent(Math.round(discountPer));
+    setTaxPercent(Math.round(taxPer));
     
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1150,8 +1170,11 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
           <div className="flex justify-end gap-3">
             <button type="button" onClick={() => { setShowForm(false); resetForm(); }} className="btn btn-secondary px-5 py-2">Close</button>
-            <button onClick={generatePDF} disabled={generating || !clientName || items.length === 0} className="btn btn-primary px-6 py-2">
-              {generating ? "Compiling PDF & Uploading..." : "Generate V2 PDF & Save"}
+            <button onClick={() => handleSave(false)} disabled={generating || !clientName || items.length === 0} className="btn btn-secondary px-6 py-2 border border-[#3b4256]">
+              {generating ? "Saving..." : "Save Invoice Only"}
+            </button>
+            <button onClick={() => handleSave(true)} disabled={generating || !clientName || items.length === 0} className="btn btn-primary px-6 py-2">
+              {generating ? "Generating & Saving..." : "Generate V2 PDF & Save"}
             </button>
           </div>
         </div>
