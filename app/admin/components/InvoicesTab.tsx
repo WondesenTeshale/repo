@@ -226,11 +226,11 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       if (logoBase64) {
         try {
           const imgProps = doc.getImageProperties(logoBase64);
-          const maxLogoHeight = 12;
+          const maxLogoHeight = 18;
           const logoWidth = (imgProps.width * maxLogoHeight) / imgProps.height;
           doc.addImage(logoBase64, "JPEG", 14, 15, logoWidth, maxLogoHeight);
         } catch (err) {
-          doc.addImage(logoBase64, "JPEG", 14, 15, 42, 12);
+          doc.addImage(logoBase64, "JPEG", 14, 15, 60, 18);
         }
       } else {
         // Logo (Draw vector 'B' icon)
@@ -249,20 +249,20 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
       doc.setDrawColor(37, 99, 235);
       doc.setLineWidth(0.8);
-      doc.line(14, 31, 14, 67); // Left bar next to details
+      doc.line(14, 35, 14, 71); // Left bar next to details
 
       doc.setFontSize(9);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(15, 23, 42);
-      doc.text("BetterDose Ltd.", 18, 35);
+      doc.text("BetterDose Ltd.", 18, 39);
       
       doc.setFont("helvetica", "normal");
       doc.setTextColor(51, 65, 85);
-      doc.text(`Website: https://www.betterdose.dev`, 18, 41);
-      doc.text(`Email: contact@betterdose.dev`, 18, 47);
-      doc.text(`Phone: +44 7460 993797 / +251 976 046 482`, 18, 53);
-      doc.text("Registered in the United Kingdom", 18, 59);
-      doc.text("Operating Team: Addis Ababa, Ethiopia", 18, 65);
+      doc.text(`Website: https://www.betterdose.dev`, 18, 45);
+      doc.text(`Email: contact@betterdose.dev`, 18, 51);
+      doc.text(`Phone: +44 7460 993797 / +251 976 046 482`, 18, 57);
+      doc.text("Registered in the United Kingdom", 18, 63);
+      doc.text("Operating Team: Addis Ababa, Ethiopia", 18, 69);
 
       // --- SECTION 2: Title & Details Table (Top Right) ---
       doc.setFontSize(36);
