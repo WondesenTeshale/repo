@@ -304,26 +304,28 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
         ["Purchase Order:", purchaseOrder || "N/A"]
       );
 
-      doc.setFontSize(8.5);
+      doc.setFontSize(8);
       infoList.forEach(([label, val], idx) => {
         const y = 47 + idx * 5.2;
         doc.setFont("helvetica", "bold");
         doc.setTextColor(71, 85, 105);
-        doc.text(label, 130, y);
+        doc.text(label, 126, y);
 
         if (label === "Invoice Status:") {
           // Status Badge
           const badgeBg = val === "Paid" ? [220, 252, 231] : [254, 243, 199];
           const badgeFg = val === "Paid" ? [22, 101, 52] : [180, 83, 9];
           doc.setFillColor(badgeBg[0], badgeBg[1], badgeBg[2]);
-          doc.roundedRect(178, y - 4, 18, 5, 1, 1, "F");
+          doc.roundedRect(154, y - 3.5, 15, 4.5, 1, 1, "F");
           doc.setFont("helvetica", "bold");
           doc.setTextColor(badgeFg[0], badgeFg[1], badgeFg[2]);
-          doc.text(val.toUpperCase(), 187, y - 0.5, { align: "center" });
+          doc.setFontSize(7);
+          doc.text(val.toUpperCase(), 161.5, y - 0.2, { align: "center" });
+          doc.setFontSize(8); // Restore
         } else {
           doc.setFont("helvetica", "normal");
           doc.setTextColor(15, 23, 42);
-          doc.text(val, 196, y, { align: "right" });
+          doc.text(val.trim(), 154, y, { maxWidth: 50 });
         }
       });
 
