@@ -316,14 +316,14 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
           const badgeBg = val === "Paid" ? [220, 252, 231] : [254, 243, 199];
           const badgeFg = val === "Paid" ? [22, 101, 52] : [180, 83, 9];
           doc.setFillColor(badgeBg[0], badgeBg[1], badgeBg[2]);
-          doc.roundedRect(165, y - 4, 18, 5, 1, 1, "F");
+          doc.roundedRect(178, y - 4, 18, 5, 1, 1, "F");
           doc.setFont("helvetica", "bold");
           doc.setTextColor(badgeFg[0], badgeFg[1], badgeFg[2]);
-          doc.text(val.toUpperCase(), 174, y - 0.5, { align: "center" });
+          doc.text(val.toUpperCase(), 187, y - 0.5, { align: "center" });
         } else {
           doc.setFont("helvetica", "normal");
           doc.setTextColor(15, 23, 42);
-          doc.text(val, 165, y);
+          doc.text(val, 196, y, { align: "right" });
         }
       });
 
@@ -350,12 +350,12 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(9.5);
       doc.setTextColor(15, 23, 42);
-      doc.text(clientName, 32, cardY + 8);
+      doc.text(clientName, 32, cardY + 8, { maxWidth: 65 });
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(71, 85, 105);
-      doc.text(clientEmail, 32, cardY + 13);
-      doc.text(`Country: ${country || "N/A"}`, 32, cardY + 18);
+      doc.text(clientEmail, 32, cardY + 13, { maxWidth: 65 });
+      doc.text(`Country: ${country || "N/A"}`, 32, cardY + 18, { maxWidth: 65 });
 
       // Project Info Card
       doc.roundedRect(108, cardY, 88, 30, 2, 2, "S");
@@ -402,7 +402,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
         } else {
           doc.setFont("helvetica", "bold");
           doc.setTextColor(15, 23, 42);
-          doc.text(v, xValue, yPos);
+          doc.text(v, xValue, yPos, { maxWidth: 35 });
         }
       });
 
@@ -601,7 +601,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
         doc.setFont("helvetica", "normal");
         doc.setFontSize(7.5);
         doc.setTextColor(15, 23, 42);
-        doc.text(d, 24, y);
+        doc.text(d, 24, y, { maxWidth: 74 });
       });
 
       // Right: Notes Card (X=108 to 196)
