@@ -4,6 +4,7 @@ import { Invoice, fetchInvoices, apiUpdateInvoice, apiDeleteInvoice, InvoiceItem
 import { Plus, X, Upload, Trash2, Eye, Download, FileText, CheckCircle2, Copy } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import QRCode from "qrcode";
 
 interface Props { token: string; onRefresh?: () => void; }
 
@@ -247,7 +248,8 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.setFontSize(36);
       doc.setFont("helvetica", "bold");
       doc.setTextColor(15, 23, 42);
-      doc.text("INVOICE", 196, 26, { align: "right" });
+      const titleText = paymentStatus === "Paid" ? "PAID INVOICE" : "INVOICE";
+      doc.text(titleText, 196, 26, { align: "right" });
 
       // Invoice ID Pill
       doc.setFillColor(15, 23, 42);
@@ -275,6 +277,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
         ["Invoice Created On:", issueDate],
         ["Due Date:", dueDate],
         ["Invoice Status:", paymentStatus],
+        ["Client ID:", invoiceNumber.replace("INV", "CL")],
         ["Currency:", currency],
         ["Payment Method:", paymentMethod],
       ];
@@ -620,10 +623,11 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.roundedRect(14, currentY, 100, 26, 2, 2, "S");
 
       // QR Code
-      const qrApiUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(verificationUrl)}`;
-      const qrBase64 = await getBase64FromUrl(qrApiUrl);
-      if (qrBase64) {
-        doc.addImage(qrBase64, "PNG", 18, currentY + 3, 20, 20);
+      try {
+        const qrDataUrl = await QRCode.toDataURL(verificationUrl, { margin: 1 });
+        doc.addImage(qrDataUrl, "PNG", 18, currentY + 3, 20, 20);
+      } catch (err) {
+        console.error("QR Code generation failed", err);
       }
 
       doc.setFont("helvetica", "bold");
