@@ -493,9 +493,9 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       const summList = [
         ["Subtotal", formatCurrency(subtotal)],
         ["Discount", `-${formatCurrency(discountAmount)}`],
-        ["Tax (0%)", "0.00 USD"],
-        ["Amount Paid", formatCurrency(amountPaid)],
-        ["Remaining Balance", formatCurrency(remainingBalance)]
+        [`Tax (${taxPercent}%)`, formatCurrency(taxAmount)],
+        ["Invoice Total", formatCurrency(totalDue)],
+        ["Amount Paid", `-${formatCurrency(amountPaid)}`]
       ];
 
       doc.setFontSize(8);
@@ -515,8 +515,8 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.roundedRect(108, sideY + 24, 88, 8, 1, 1, "F");
       doc.setFont("helvetica", "bold");
       doc.setTextColor(255, 255, 255);
-      doc.text("TOTAL DUE", 112, sideY + 29.5);
-      doc.text(formatCurrency(totalDue), 192, sideY + 29.5, { align: "right" });
+      doc.text("AMOUNT DUE", 112, sideY + 29.5);
+      doc.text(formatCurrency(remainingBalance), 192, sideY + 29.5, { align: "right" });
 
       currentY = Math.max((doc as any).lastAutoTable.finalY || 0, sideY + 36) + 6;
 
@@ -1142,9 +1142,9 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
               <p className="text-[#556080]">Tax Amount: <span className="text-[#e8eaf2] font-semibold">+{taxAmount.toLocaleString()} {currency} ({taxPercent}%)</span></p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-[#8b92a9] font-bold">TOTAL DUE: <span className="text-green-400">{totalDue.toLocaleString()} {currency}</span></p>
+              <p className="text-sm text-[#8b92a9] font-bold">INVOICE TOTAL: <span className="text-green-400">{totalDue.toLocaleString()} {currency}</span></p>
               <p className="text-[#556080] mt-1">Amount Paid: <span className="text-[#e8eaf2] font-semibold">-{amountPaid.toLocaleString()} {currency}</span></p>
-              <p className="text-sm text-red-400 font-bold">REMAINING BALANCE: {remainingBalance.toLocaleString()} {currency}</p>
+              <p className="text-sm text-red-400 font-bold">AMOUNT DUE: {remainingBalance.toLocaleString()} {currency}</p>
             </div>
           </div>
 
