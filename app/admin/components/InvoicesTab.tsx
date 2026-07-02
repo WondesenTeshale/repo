@@ -224,7 +224,14 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
       // --- SECTION 1: Company Header (Top Left) ---
       if (logoBase64) {
-        doc.addImage(logoBase64, "JPEG", 14, 15, 42, 12);
+        try {
+          const imgProps = doc.getImageProperties(logoBase64);
+          const maxLogoHeight = 12;
+          const logoWidth = (imgProps.width * maxLogoHeight) / imgProps.height;
+          doc.addImage(logoBase64, "JPEG", 14, 15, logoWidth, maxLogoHeight);
+        } catch (err) {
+          doc.addImage(logoBase64, "JPEG", 14, 15, 42, 12);
+        }
       } else {
         // Logo (Draw vector 'B' icon)
         doc.setFillColor(37, 99, 235); // BetterDose Blue
