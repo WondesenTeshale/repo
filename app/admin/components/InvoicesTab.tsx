@@ -338,10 +338,34 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
       // --- SECTION 3: Billed To & Project Information Cards ---
       const cardY = 47 + infoList.length * 5.2 + 8;
+      const projList = [
+        ["Project Name:", projectName || clientName],
+        ["Project Category:", projectCategory],
+        ["Project Start Date:", projectStartDate],
+        ["Project Completion Date:", projectEndDate],
+        ["Assigned Team:", projectTeam],
+        ["Project Status:", projectStatus]
+      ];
+
+      // Calculate dynamic height
+      let totalProjExtraHeight = 0;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(7.5);
+      const projLineHeights = projList.map(([lbl, v]) => {
+        if (lbl === "Project Status:") return 4.5;
+        const lines = doc.splitTextToSize(v, 34).length;
+        const h = lines * 3.5 + 1; // 3.5 per line + 1 padding
+        totalProjExtraHeight += Math.max(0, h - 4.5);
+        return Math.max(4.5, h);
+      });
+
+      const baseCardHeight = 32;
+      const cardHeight = Math.max(baseCardHeight, baseCardHeight + totalProjExtraHeight - 4); // -4 to absorb some of the default empty padding
+
       // Billed To Card
       doc.setDrawColor(203, 213, 225);
       doc.setLineWidth(0.4);
-      doc.roundedRect(14, cardY, 88, 30, 2, 2, "S");
+      doc.roundedRect(14, cardY, 88, cardHeight, 2, 2, "S");
       
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8.5);
@@ -367,7 +391,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.text(`Country: ${country || "N/A"}`, 32, cardY + 18, { maxWidth: 65 });
 
       // Project Info Card
-      doc.roundedRect(108, cardY, 88, 30, 2, 2, "S");
+      doc.roundedRect(108, cardY, 88, cardHeight, 2, 2, "S");
       doc.setFont("helvetica", "bold");
       doc.setTextColor(37, 99, 235);
       doc.text("PROJECT INFORMATION", 108, cardY - 3);
@@ -380,39 +404,34 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.setLineWidth(0.5);
       doc.roundedRect(114, cardY + 6, 6, 6, 0.5, 0.5, "S");
 
-      const projList = [
-        ["Project Name:", projectName || clientName],
-        ["Project Category:", projectCategory],
-        ["Project Start Date:", projectStartDate],
-        ["Project Completion Date:", projectEndDate],
-        ["Assigned Team:", projectTeam],
-        ["Project Status:", projectStatus]
-      ];
-
       doc.setFontSize(7.5);
+      let currentProjY = cardY + 5.5;
       projList.forEach(([lbl, v], idx) => {
         const xLabel = 126;
         const xValue = 160;
-        const yPos = cardY + 5.5 + idx * 4.5;
 
         doc.setFont("helvetica", "normal");
         doc.setTextColor(71, 85, 105);
-        doc.text(lbl, xLabel, yPos);
+        doc.text(lbl, xLabel, currentProjY);
 
         if (lbl === "Project Status:") {
           const bg = v === "Completed" ? [220, 252, 231] : [254, 243, 199];
           const fg = v === "Completed" ? [22, 101, 52] : [180, 83, 9];
           doc.setFillColor(bg[0], bg[1], bg[2]);
-          doc.roundedRect(xValue, yPos - 3.5, 15, 4.5, 1, 1, "F");
+          doc.roundedRect(xValue, currentProjY - 3.5, 15, 4.5, 1, 1, "F");
           doc.setFont("helvetica", "bold");
           doc.setTextColor(fg[0], fg[1], fg[2]);
           doc.setFontSize(7);
-          doc.text(v, xValue + 7.5, yPos - 0.5, { align: "center" });
+          doc.text(v, xValue + 7.5, currentProjY - 0.5, { align: "center" });
+          doc.setFontSize(7.5); // restore
         } else {
           doc.setFont("helvetica", "bold");
           doc.setTextColor(15, 23, 42);
-          doc.text(v, xValue, yPos, { maxWidth: 35 });
+          const splitText = doc.splitTextToSize(v, 34);
+          doc.text(splitText, xValue, currentProjY);
         }
+        
+        currentProjY += projLineHeights[idx];
       });
 
       // --- SECTION 4: Service Table ---
@@ -433,7 +452,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       );
 
       autoTable(doc, {
-        startY: cardY + 36,
+        startY: cardY + cardHeight + 6,
         head: tableHead,
         body: formattedItems,
         theme: 'striped',
