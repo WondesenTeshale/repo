@@ -480,6 +480,12 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
 
       let currentY = (doc as any).lastAutoTable.finalY + 10;
 
+      // Ensure there is space for Milestones & Payment Summary on the current page
+      if (currentY + 45 > 280) {
+        doc.addPage();
+        currentY = 20;
+      }
+
       // --- SECTION 5: Milestones & Payment Summary side-by-side ---
       // We will define a clean boundary logic. A4 total width is 210, usable is 196.
       // Left side: X=14 to 102. Right side: X=108 to 196.
@@ -560,6 +566,12 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
       doc.text(formatCurrency(remainingBalance), 192, sideY + 29.5, { align: "right" });
 
       currentY = Math.max((doc as any).lastAutoTable.finalY || 0, sideY + 36) + 6;
+
+      // Ensure there is space for Payment History heading
+      if (currentY + 15 > 280) {
+        doc.addPage();
+        currentY = 20;
+      }
 
       // --- SECTION 6: Payment History ---
       doc.setFont("helvetica", "bold");
