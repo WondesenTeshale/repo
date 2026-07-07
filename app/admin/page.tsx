@@ -274,7 +274,7 @@ export default function AdminPage() {
           {loading ? (
             <p className="text-sm text-[#556080]">Loading data from Supabase...</p>
           ) : (
-            <div className="card p-4 sm:p-8 max-h-[75vh] overflow-y-auto overflow-x-hidden">
+            <div className="card p-4 sm:p-8">
               {tab === "projects" && <ProjectsTab projects={projects} token={token} onRefresh={loadAll} />}
               {tab === "team" && <TeamTab members={members} token={token} onRefresh={loadAll} />}
               {tab === "activity" && <ActivityTab entries={entries} token={token} onRefresh={loadAll} />}

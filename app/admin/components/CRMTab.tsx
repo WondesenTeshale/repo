@@ -107,7 +107,7 @@ export default function CRMTab({ token }: Props) {
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
         {filtered.map(lead => (
           <div key={lead.id} className="card border border-[#252d3d] overflow-hidden">
             {/* Lead header */}

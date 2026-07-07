@@ -112,7 +112,7 @@ export default function MessagesTab({ token }: Props) {
           <p className="text-xs text-[#556080]">No messages found in this folder.</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
           {filtered.map(msg => {
             const isExpanded = expandedId === msg.id;
             return (

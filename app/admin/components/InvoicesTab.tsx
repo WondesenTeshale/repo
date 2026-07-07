@@ -1226,7 +1226,7 @@ export default function InvoicesTab({ token, onRefresh }: Props) {
           <p className="text-sm">No invoices generated yet.</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-[#252d3d] text-[#8b92a9]">
