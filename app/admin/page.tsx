@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Mail, Settings, PhoneCall, FileText, ShieldCheck } from "lucide-react";
+import { LogIn, LogOut, FolderGit, Users, Activity, HardDrive, Mail, Settings, PhoneCall, FileText, ShieldCheck, BarChart2, DollarSign, CheckSquare, Megaphone, Server } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { fetchProjects, fetchAllProjects, fetchConfig, fetchTeamMembers, fetchActivityEntries, HASHED_USER, HASHED_PASS, Project, BusinessConfig, TeamMember, ActivityEntry } from "@/lib/db";
+import { fetchAllProjects, fetchConfig, fetchTeamMembers, fetchActivityEntries, HASHED_USER, HASHED_PASS, Project, BusinessConfig, TeamMember, ActivityEntry } from "@/lib/db";
 import ProjectsTab from "./components/ProjectsTab";
 import TeamTab from "./components/TeamTab";
 import ActivityTab from "./components/ActivityTab";
@@ -13,13 +13,18 @@ import MessagesTab from "./components/MessagesTab";
 import CRMTab from "./components/CRMTab";
 import InvoicesTab from "./components/InvoicesTab";
 import ContractsTab from "./components/ContractsTab";
+import AnalyticsTab from "./components/AnalyticsTab";
+import FinanceTab from "./components/FinanceTab";
+import TasksTab from "./components/TasksTab";
+import MarketingTab from "./components/MarketingTab";
+import StatusTab from "./components/StatusTab";
 
 async function sha256(msg: string) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-type Tab = "projects" | "team" | "activity" | "media" | "messages" | "crm" | "invoices" | "contracts" | "settings";
+type Tab = "projects" | "team" | "activity" | "media" | "messages" | "crm" | "invoices" | "contracts" | "settings" | "analytics" | "finance" | "tasks" | "marketing" | "status";
 
 const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
   { key: "projects", label: "Projects", icon: <FolderGit size={14} /> },
@@ -31,6 +36,11 @@ const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
   { key: "invoices", label: "Invoices", icon: <FileText size={14} /> },
   { key: "contracts", label: "Contracts", icon: <ShieldCheck size={14} /> },
   { key: "settings", label: "Settings", icon: <Settings size={14} /> },
+  { key: "analytics", label: "Analytics", icon: <BarChart2 size={14} /> },
+  { key: "finance", label: "Finance", icon: <DollarSign size={14} /> },
+  { key: "tasks", label: "Tasks", icon: <CheckSquare size={14} /> },
+  { key: "marketing", label: "Marketing", icon: <Megaphone size={14} /> },
+  { key: "status", label: "System Status", icon: <Server size={14} /> },
 ];
 
 export default function AdminPage() {
@@ -258,17 +268,19 @@ export default function AdminPage() {
             <button type="button" onClick={handleLogout} className="btn btn-ghost text-xs py-1.5 px-3"><LogOut size={13} /> Logout</button>
           </div>
 
-          {/* Tab Nav */}
-          <div className="flex gap-1 mb-8 flex-wrap border-b border-[#252d3d] pb-0">
-            {TABS.map(t => (
-              <button key={t.key} type="button" onClick={() => setTab(t.key)}
-                className={`relative flex items-center gap-1.5 text-xs px-4 py-2.5 border-b-2 transition-colors -mb-px ${tab === t.key ? "border-[#4f8ef7] text-[#4f8ef7]" : "border-transparent text-[#556080] hover:text-[#8b92a9]"}`}>
-                {t.icon} {t.label}
-                {t.key === "messages" && unreadMessages > 0 && (
-                  <span className="absolute top-1.5 right-1 flex h-2 w-2 items-center justify-center rounded-full bg-red-500"></span>
-                )}
-              </button>
-            ))}
+          {/* Tab Nav — horizontal scroll */}
+          <div className="overflow-x-auto pb-0 mb-8">
+            <div className="flex gap-1 border-b border-[#252d3d] min-w-max">
+              {TABS.map(t => (
+                <button key={t.key} type="button" onClick={() => setTab(t.key)}
+                  className={`relative flex items-center gap-1.5 text-xs px-4 py-2.5 border-b-2 transition-colors -mb-px whitespace-nowrap ${tab === t.key ? "border-[#4f8ef7] text-[#4f8ef7]" : "border-transparent text-[#556080] hover:text-[#8b92a9]"}`}>
+                  {t.icon} {t.label}
+                  {t.key === "messages" && unreadMessages > 0 && (
+                    <span className="absolute top-1.5 right-1 flex h-2 w-2 items-center justify-center rounded-full bg-red-500"></span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
           {loading ? (
@@ -284,6 +296,11 @@ export default function AdminPage() {
               {tab === "invoices" && <InvoicesTab token={token} />}
               {tab === "contracts" && <ContractsTab token={token} />}
               {tab === "settings" && config && <SettingsTab config={config} token={token} onRefresh={loadAll} />}
+              {tab === "analytics" && <AnalyticsTab />}
+              {tab === "finance" && <FinanceTab />}
+              {tab === "tasks" && <TasksTab />}
+              {tab === "marketing" && <MarketingTab />}
+              {tab === "status" && <StatusTab />}
             </div>
           )}
         </div>
