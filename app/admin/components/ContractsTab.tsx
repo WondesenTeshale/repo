@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { Contract, fetchContracts, apiUpdateContract, apiDeleteContract, ContractMilestone, ContractPaymentSchedule } from "@/lib/db";
-import { Trash2, FileSignature, Plus, X, Download, RefreshCw, Upload, Eye, Check } from "lucide-react";
+import { Trash2, FileSignature, Plus, X, Download, RefreshCw, Upload, Eye, Check, Edit } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -28,6 +28,11 @@ export default function ContractsTab({ token, onRefresh }: Props) {
   const [generating, setGenerating] = useState(false);
   const [uploadingSig, setUploadingSig] = useState(false);
   const [uploadingStamp, setUploadingStamp] = useState(false);
+
+  // Edit states
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [existingVerificationCode, setExistingVerificationCode] = useState<string>("");
+  const [status, setStatus] = useState<string>("Draft");
 
   // Form states
   const [contractNumber, setContractNumber] = useState("");
@@ -66,7 +71,31 @@ export default function ContractsTab({ token, onRefresh }: Props) {
     setDeliverables(["Source Code", "Documentation", "Deployment Config"]);
     setSignatureUrl("");
     setStampUrl("");
+    setEditingId(null);
+    setExistingVerificationCode("");
+    setStatus("Draft");
   }, []);
+
+  const startEdit = (c: Contract) => {
+    setEditingId(c.id);
+    setExistingVerificationCode(c.verificationCode);
+    setContractNumber(c.contractNumber);
+    setClientName(c.clientName);
+    setClientEmail(c.clientEmail);
+    setCompany(c.company);
+    setProject(c.project);
+    setIssueDate(c.issueDate);
+    setScopeOfWork(c.scopeOfWork);
+    setGoverningLaw(c.governingLaw);
+    setNotes(c.notes);
+    setMilestones(c.milestones || []);
+    setPaymentSchedule(c.paymentSchedule || []);
+    setDeliverables(c.deliverables || []);
+    setSignatureUrl(c.signatureUrl || "");
+    setStampUrl(c.stampUrl || "");
+    setStatus(c.status);
+    setShowForm(true);
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -132,7 +161,9 @@ export default function ContractsTab({ token, onRefresh }: Props) {
     setGenerating(true);
     try {
       const codeChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const randomCode = "PDFFX-" + Array.from({ length: 10 }, () => codeChars[Math.floor(Math.random() * codeChars.length)]).join("");
+      const randomCode = editingId && existingVerificationCode 
+        ? existingVerificationCode 
+        : "PDFFX-" + Array.from({ length: 10 }, () => codeChars[Math.floor(Math.random() * codeChars.length)]).join("");
       const verificationUrl = `https://www.betterdose.dev/pdffx/${randomCode}`;
 
       const doc = new jsPDF();
@@ -329,11 +360,12 @@ export default function ContractsTab({ token, onRefresh }: Props) {
       if (!uploadRes.ok) throw new Error("Failed to upload PDF");
       const uploadData = await uploadRes.json();
 
-      // 3. Save to Database
+      // 3. Save or Update in Database
       const saveRes = await fetch("/api/contracts", {
-        method: "POST",
+        method: editingId ? "PATCH" : "POST",
         headers: { "x-admin-token": token, "Content-Type": "application/json" },
         body: JSON.stringify({
+          ...(editingId ? { id: editingId } : {}),
           contract_number: contractNumber,
           client_name: clientName,
           client_email: clientEmail,
@@ -395,7 +427,7 @@ export default function ContractsTab({ token, onRefresh }: Props) {
 
       {showForm && (
         <div className="card p-6 mb-8 border border-[#4f8ef7]/30 bg-[#0f1117]/50 max-h-[85vh] overflow-y-auto">
-          <h3 className="text-sm font-bold text-[#e8eaf2] mb-6">Draft Professional Contract V2</h3>
+          <h3 className="text-sm font-bold text-[#e8eaf2] mb-6">{editingId ? "Edit Professional Contract V2" : "Draft Professional Contract V2"}</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div><label className="text-[10px] text-[#556080] uppercase tracking-wider mb-1 block">Contract Number</label><input type="text" className="input w-full" value={contractNumber} onChange={e => setContractNumber(e.target.value)} /></div>
@@ -549,7 +581,7 @@ export default function ContractsTab({ token, onRefresh }: Props) {
           <div className="flex justify-end gap-3">
             <button type="button" onClick={() => { setShowForm(false); resetForm(); }} className="btn btn-secondary px-5 py-2">Close</button>
             <button onClick={generatePDF} disabled={generating || !clientName} className="btn btn-primary px-6 py-2">
-              {generating ? "Compiling PDF & Uploading..." : "Generate V2 Contract & Save"}
+              {generating ? "Compiling PDF & Uploading..." : editingId ? "Update Contract & Regenerate PDF" : "Generate V2 Contract & Save"}
             </button>
           </div>
         </div>
@@ -602,6 +634,9 @@ export default function ContractsTab({ token, onRefresh }: Props) {
                   </td>
                   <td className="py-3 text-right">
                     <div className="flex justify-end gap-2">
+                      <button onClick={() => startEdit(c)} className="btn btn-ghost p-1.5 text-yellow-400 hover:bg-yellow-400/10" title="Edit Contract">
+                        <Edit size={14} />
+                      </button>
                       <a href={`/pdffx/${c.verificationCode}`} className="btn btn-ghost p-1.5 text-green-400 hover:bg-green-400/10" title="Verify Online">
                         <Eye size={14} />
                       </a>

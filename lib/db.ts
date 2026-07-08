@@ -530,10 +530,25 @@ export async function fetchContracts(token: string): Promise<Contract[]> {
 }
 
 export async function apiUpdateContract(id: string, updates: Partial<Contract>, token: string): Promise<boolean> {
-  const dbUpdates = {
-    status: updates.status,
-    notes: updates.notes,
-  };
+  const dbUpdates: Record<string, any> = {};
+  if (updates.contractNumber !== undefined) dbUpdates.contract_number = updates.contractNumber;
+  if (updates.clientName !== undefined) dbUpdates.client_name = updates.clientName;
+  if (updates.clientEmail !== undefined) dbUpdates.client_email = updates.clientEmail;
+  if (updates.company !== undefined) dbUpdates.company = updates.company;
+  if (updates.project !== undefined) dbUpdates.project = updates.project;
+  if (updates.status !== undefined) dbUpdates.status = updates.status;
+  if (updates.issueDate !== undefined) dbUpdates.issue_date = updates.issueDate;
+  if (updates.scopeOfWork !== undefined) dbUpdates.scope_of_work = updates.scopeOfWork;
+  if (updates.milestones !== undefined) dbUpdates.milestones = updates.milestones;
+  if (updates.deliverables !== undefined) dbUpdates.deliverables = updates.deliverables;
+  if (updates.paymentSchedule !== undefined) dbUpdates.payment_schedule = updates.paymentSchedule;
+  if (updates.governingLaw !== undefined) dbUpdates.governing_law = updates.governingLaw;
+  if (updates.notes !== undefined) dbUpdates.notes = updates.notes;
+  if (updates.fileUrl !== undefined) dbUpdates.file_url = updates.fileUrl;
+  if (updates.signatureUrl !== undefined) dbUpdates.signature_url = updates.signatureUrl;
+  if (updates.stampUrl !== undefined) dbUpdates.stamp_url = updates.stampUrl;
+  if (updates.verificationCode !== undefined) dbUpdates.verification_code = updates.verificationCode;
+
   const res = await fetch("/api/contracts", {
     method: "PATCH",
     headers: adminHeaders(token),
