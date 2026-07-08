@@ -131,234 +131,185 @@ export default function ContractsTab({ token, onRefresh }: Props) {
   const generatePDF = async () => {
     setGenerating(true);
     try {
-      // Generate unique verification code
       const codeChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const randomCode = "PDFFX-" + Array.from({ length: 10 }, () => codeChars[Math.floor(Math.random() * codeChars.length)]).join("");
       const verificationUrl = `https://www.betterdose.dev/pdffx/${randomCode}`;
 
       const doc = new jsPDF();
-      
-      // Brand Accent Colors
-      const primaryColor = [30, 64, 175]; // Blue
-      const grayColor = [100, 100, 100];
-      const darkColor = [30, 41, 59];
 
-      // --- SECTION 1: Header & Company Details ---
-      doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.rect(14, 15, 6, 22, "F");
+      const primaryColor: [number, number, number] = [30, 64, 175];
+      const secondaryColor: [number, number, number] = [37, 99, 235];
+      const grayColor: [number, number, number] = [100, 116, 139];
+      const darkColor: [number, number, number] = [15, 23, 42];
+      const slateColor: [number, number, number] = [51, 65, 85];
 
-      doc.setFontSize(22);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text("BETTERDOSE", 24, 23);
+      // Logo (matching invoice)
+      const logoBase64 = await getBase64FromUrl(window.location.origin + "/logo.jpg");
+      if (logoBase64) {
+        try {
+          const imgProps = doc.getImageProperties(logoBase64);
+          const maxLogoHeight = 18;
+          const logoWidth = (imgProps.width * maxLogoHeight) / imgProps.height;
+          doc.addImage(logoBase64, "JPEG", 14, 15, logoWidth, maxLogoHeight);
+        } catch {
+          doc.addImage(logoBase64, "JPEG", 14, 15, 60, 18);
+        }
+      } else {
+        doc.setFillColor(...secondaryColor);
+        doc.roundedRect(14, 15, 12, 12, 3, 3, "F");
+        doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255); doc.setFontSize(9);
+        doc.text("B", 19, 23, { align: "center" });
+      }
 
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.text("BetterDose Ltd.", 24, 29);
-      doc.text("https://betterdose.dev | contact@betterdose.dev", 24, 34);
+      // Left blue accent bar
+      doc.setDrawColor(...secondaryColor); doc.setLineWidth(0.8);
+      doc.line(14, 35, 14, 71);
+      doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(...darkColor);
+      doc.text("BetterDose Ltd.", 18, 39);
+      doc.setFont("helvetica", "normal"); doc.setTextColor(...slateColor);
+      doc.text("Website: https://www.betterdose.dev", 18, 45);
+      doc.text("Email: contact@betterdose.dev", 18, 51);
+      doc.text("Phone: +44 7460 993797 / +251 976 046 482", 18, 57);
+      doc.text("Registered in the United Kingdom", 18, 63);
+      doc.text("Operating Team: Addis Ababa, Ethiopia", 18, 69);
 
-      doc.setFontSize(8);
-      doc.text("Registered in the United Kingdom", 24, 39);
-      doc.text("Operating Team: Addis Ababa, Ethiopia", 24, 44);
+      // Title pill (right side)
+      doc.setFontSize(30); doc.setFont("helvetica", "bold"); doc.setTextColor(...darkColor);
+      doc.text("AGREEMENT", 196, 26, { align: "right" });
+      doc.setFillColor(...darkColor);
+      doc.roundedRect(140, 31, 56, 8, 4, 4, "F");
+      doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(255, 255, 255);
+      doc.text(contractNumber, 168, 36.5, { align: "center" });
+      doc.setFontSize(8); doc.setFont("helvetica", "normal"); doc.setTextColor(...grayColor);
+      doc.text(`Date: ${issueDate}`, 196, 46, { align: "right" });
+      doc.text(`Governing Law: ${governingLaw}`, 196, 51, { align: "right" });
 
-      // Large Contract ID
-      doc.setFontSize(24);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text("AGREEMENT", 130, 26);
+      doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.4);
+      doc.line(14, 76, 196, 76);
 
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text(`Reference: ${contractNumber}`, 130, 34);
-      doc.text(`Date: ${issueDate}`, 130, 40);
+      // Party cards
+      const cardY = 81;
+      doc.setFillColor(248, 250, 252); doc.roundedRect(14, cardY, 85, 36, 3, 3, "F");
+      doc.setDrawColor(226, 232, 240); doc.roundedRect(14, cardY, 85, 36, 3, 3, "S");
+      doc.setFontSize(7); doc.setFont("helvetica", "bold"); doc.setTextColor(...grayColor);
+      doc.text("SERVICE PROVIDER", 18, cardY + 6);
+      doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(...darkColor);
+      doc.text("BetterDose Ltd.", 18, cardY + 13);
+      doc.setFontSize(7.5); doc.setFont("helvetica", "normal"); doc.setTextColor(...slateColor);
+      doc.text("Addis Ababa, Ethiopia / London, UK", 18, cardY + 19);
+      doc.text("contact@betterdose.dev", 18, cardY + 24);
+      doc.text("https://www.betterdose.dev", 18, cardY + 29);
 
-      doc.setDrawColor(226, 232, 240);
-      doc.line(14, 50, 196, 50);
+      doc.setFillColor(248, 250, 252); doc.roundedRect(105, cardY, 91, 36, 3, 3, "F");
+      doc.setDrawColor(226, 232, 240); doc.roundedRect(105, cardY, 91, 36, 3, 3, "S");
+      doc.setFontSize(7); doc.setFont("helvetica", "bold"); doc.setTextColor(...grayColor);
+      doc.text("CLIENT / COUNTERPARTY", 109, cardY + 6);
+      doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(...darkColor);
+      doc.text(`${clientName}${company ? ` — ${company}` : ""}`, 109, cardY + 13, { maxWidth: 85 });
+      doc.setFontSize(7.5); doc.setFont("helvetica", "normal"); doc.setTextColor(...slateColor);
+      doc.text(clientEmail, 109, cardY + 22);
+      doc.text(`Project: ${project || "General Services"}`, 109, cardY + 27);
 
-      // --- SECTION 2: Between Parties ---
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text("PARTIES TO THE AGREEMENT:", 14, 60);
+      let currentY = cardY + 44;
 
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFontSize(9);
-      doc.text("This Master Service Agreement is entered into by and between:", 14, 66);
-      
-      // BetterDose Info
-      doc.setFont("helvetica", "bold");
-      doc.text("BetterDose Ltd.", 14, 73);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.text("Addis Ababa, Ethiopia / London, UK (hereinafter 'Service Provider')", 14, 78);
+      // Scope
+      doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(...primaryColor);
+      doc.text("1. SCOPE OF SERVICES", 14, currentY);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(...darkColor);
+      const scopeLines = doc.splitTextToSize(scopeOfWork, 180);
+      doc.text(scopeLines, 14, currentY + 7);
+      currentY += 7 + scopeLines.length * 5 + 6;
 
-      // Client Info
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text(`${clientName} ${company ? `(${company})` : ""}`, 14, 85);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.text(`${clientEmail} (hereinafter 'Client')`, 14, 90);
-
-      // --- SECTION 3: Scope of Work ---
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text("1. SCOPE OF SERVICES", 14, 105);
-
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFontSize(9);
-      doc.text(`Project reference: ${project || "General Digital Services"}`, 14, 111);
-      doc.text(scopeOfWork, 14, 117, { maxWidth: 180 });
-
-      // --- SECTION 4: Milestones ---
-      let currentY = 135;
+      // Milestones
       if (milestones.length > 0) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        if (currentY + 20 > 270) { doc.addPage(); currentY = 20; }
+        doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(...primaryColor);
         doc.text("2. PROJECT MILESTONES & PHASES", 14, currentY);
-
-        const milestoneBody = milestones.map(m => [
-          m.milestone,
-          m.description || "N/A",
-          m.completionDate || "N/A",
-          `$${Number(m.amount).toLocaleString()}`,
-          m.status
-        ]);
-
         autoTable(doc, {
           startY: currentY + 3,
-          head: [['Milestone', 'Description', 'Completion Date', 'Value', 'Status']],
-          body: milestoneBody,
-          theme: 'grid',
-          headStyles: { fillColor: primaryColor as [number, number, number], fontSize: 8 },
-          bodyStyles: { fontSize: 8 }
+          head: [["Milestone", "Description", "Target Date", "Value", "Status"]],
+          body: milestones.map(m => [m.milestone, m.description || "N/A", m.completionDate || "N/A", `$${Number(m.amount).toLocaleString()}`, m.status]),
+          theme: "grid",
+          headStyles: { fillColor: primaryColor, fontSize: 8, fontStyle: "bold" },
+          bodyStyles: { fontSize: 8, textColor: darkColor },
+          alternateRowStyles: { fillColor: [248, 250, 252] },
         });
         currentY = (doc as any).lastAutoTable.finalY + 10;
       }
 
-      // --- SECTION 5: Deliverables Checklist ---
-      if (deliverables.length > 0 && currentY < 235) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-        doc.text("3. INCLUDED DELIVERABLES & ARTIFACTS", 14, currentY);
-
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(9);
-        doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-
-        const cols = 2;
+      // Deliverables
+      if (deliverables.length > 0) {
+        if (currentY + 20 > 270) { doc.addPage(); currentY = 20; }
+        doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(...primaryColor);
+        doc.text("3. INCLUDED DELIVERABLES", 14, currentY);
+        doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(...darkColor);
         deliverables.forEach((item, idx) => {
-          const col = idx % cols;
-          const row = Math.floor(idx / cols);
-          const x = 14 + col * 90;
-          const y = currentY + 5 + row * 5;
-          doc.text(`[X]  ${item}`, x, y);
+          const col = idx % 2, row = Math.floor(idx / 2);
+          doc.text(`✓  ${item}`, 14 + col * 92, currentY + 8 + row * 6);
         });
-
-        currentY += Math.ceil(deliverables.length / cols) * 5 + 10;
+        currentY += 8 + Math.ceil(deliverables.length / 2) * 6 + 8;
       }
 
-      if (currentY > 210) {
-        doc.addPage();
-        currentY = 20;
-      }
-
-      // --- SECTION 6: Payment Schedule ---
+      // Payment Schedule
       if (paymentSchedule.length > 0) {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+        if (currentY + 20 > 270) { doc.addPage(); currentY = 20; }
+        doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(...primaryColor);
         doc.text("4. PAYMENT SCHEDULE", 14, currentY);
-
-        const scheduleBody = paymentSchedule.map(s => [
-          s.phase,
-          `$${Number(s.amount).toLocaleString()}`,
-          s.dueDate || "N/A",
-          s.status
-        ]);
-
         autoTable(doc, {
           startY: currentY + 3,
-          head: [['Payment Phase', 'Amount Due', 'Target Due Date', 'Status']],
-          body: scheduleBody,
-          theme: 'striped',
-          headStyles: { fillColor: [71, 85, 105], fontSize: 8 },
-          bodyStyles: { fontSize: 8 }
+          head: [["Payment Phase", "Amount Due", "Due Date", "Status"]],
+          body: paymentSchedule.map(s => [s.phase, `$${Number(s.amount).toLocaleString()}`, s.dueDate || "N/A", s.status]),
+          theme: "striped",
+          headStyles: { fillColor: slateColor, fontSize: 8, fontStyle: "bold" },
+          bodyStyles: { fontSize: 8, textColor: darkColor },
+          alternateRowStyles: { fillColor: [248, 250, 252] },
         });
         currentY = (doc as any).lastAutoTable.finalY + 10;
       }
 
-      // --- SECTION 7: Governing Law & Terms ---
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text("5. GOVERNING LAW & INTELLECTUAL PROPERTY", 14, currentY);
+      // Legal
+      if (currentY + 30 > 270) { doc.addPage(); currentY = 20; }
+      doc.setFontSize(10); doc.setFont("helvetica", "bold"); doc.setTextColor(...primaryColor);
+      doc.text("5. GOVERNING LAW & TERMS", 14, currentY);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(...darkColor);
+      doc.text(`This Agreement is governed by the laws of ${governingLaw}.`, 14, currentY + 7);
+      const notesLines = doc.splitTextToSize(notes, 180);
+      doc.text(notesLines, 14, currentY + 13);
+      currentY += 13 + notesLines.length * 5 + 10;
 
+      // QR + Signatures (force last page space)
+      if (currentY + 45 > 280) { doc.addPage(); currentY = 20; }
+      const qrY = Math.max(currentY, 240);
+
+      try {
+        const QRCode = (await import("qrcode")).default;
+        const qrDataUrl = await QRCode.toDataURL(verificationUrl, { width: 100, margin: 1 });
+        doc.addImage(qrDataUrl, "PNG", 14, qrY, 22, 22);
+      } catch { /* skip QR if unavailable */ }
+
+      doc.setFontSize(7); doc.setFont("helvetica", "bold"); doc.setTextColor(...grayColor);
+      doc.text("Verify this contract online", 40, qrY + 5);
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFontSize(8.5);
-      doc.text(`This Agreement shall be governed by, and construed in accordance with, the standard laws of the ${governingLaw}.`, 14, currentY + 6);
-      doc.text(notes, 14, currentY + 12, { maxWidth: 180 });
+      doc.text("Scan QR or visit:", 40, qrY + 10);
+      doc.setTextColor(...primaryColor);
+      doc.text(`betterdose.dev/pdffx/${randomCode}`, 40, qrY + 15);
 
-      // Ensure space for QR verification and signature block
-      if (currentY > 195) {
-        doc.addPage();
-        currentY = 20;
-      }
-
-      // --- SECTION 8: QR Code Verification ---
-      const qrY = 240;
-      const qrApiUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(verificationUrl)}`;
-      const qrBase64 = await getBase64FromUrl(qrApiUrl);
-
-      if (qrBase64) {
-        doc.addImage(qrBase64, "PNG", 14, qrY, 20, 20);
-      }
-      doc.setFontSize(7);
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.setFont("helvetica", "bold");
-      doc.text("Verify this contract online", 38, qrY + 4);
-      doc.setFont("helvetica", "normal");
-      doc.text("Scan the QR code or visit", 38, qrY + 8);
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text(`betterdose.dev/pdffx/${randomCode}`, 38, qrY + 12);
-
-      // --- SECTION 9: Signatures & Stamp ---
-      const sigX = 135;
-      const sigY = 240;
-
+      const sigX = 130, sigY = qrY;
       doc.setDrawColor(200, 200, 200);
-      doc.line(sigX, sigY + 10, sigX + 55, sigY + 10);
-      
-      doc.setFontSize(8);
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFont("helvetica", "bold");
-      doc.text("Nebiyu Muluadam", sigX, sigY + 14);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(7);
-      doc.setTextColor(grayColor[0], grayColor[1], grayColor[2]);
-      doc.text("Founder & Lead Software Engineer", sigX, sigY + 18);
-      doc.text("BetterDose Ltd.", sigX, sigY + 21);
+      doc.line(sigX, sigY + 14, sigX + 60, sigY + 14);
+      doc.setFontSize(8); doc.setFont("helvetica", "bold"); doc.setTextColor(...darkColor);
+      doc.text("Nebiyu Muluadam", sigX, sigY + 18);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(...grayColor);
+      doc.text("Founder & Lead Software Engineer", sigX, sigY + 22);
+      doc.text("BetterDose Ltd.", sigX, sigY + 26);
 
       if (signatureUrl) {
         const sigBase64 = await getBase64FromUrl(signatureUrl);
-        if (sigBase64) {
-          doc.addImage(sigBase64, "PNG", sigX + 5, sigY - 10, 45, 18);
-        }
+        if (sigBase64) doc.addImage(sigBase64, "PNG", sigX + 5, sigY - 8, 45, 18);
       }
-
       if (stampUrl) {
         const stampBase64 = await getBase64FromUrl(stampUrl);
-        if (stampBase64) {
-          doc.addImage(stampBase64, "PNG", sigX - 35, sigY - 12, 28, 28);
-        }
+        if (stampBase64) doc.addImage(stampBase64, "PNG", sigX - 30, sigY - 10, 26, 26);
       }
 
       // Output Blob
