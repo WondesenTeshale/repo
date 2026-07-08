@@ -200,26 +200,68 @@ ${formData.message}
               {/* Online Profiles */}
               <div className="card p-7 space-y-4">
                 <h2 className="text-sm font-semibold text-[#e8eaf2]">Online Profiles</h2>
-                <div className="flex flex-col gap-1">
-                  {[
-                    { label: "GitHub — Nebiyu M.", url: config.githubNebiyu },
-                    { label: "GitHub — Eyob M.", url: config.githubEyob },
-                    { label: "GitHub — Abel T.", url: config.githubAbel },
-                    { label: "LinkedIn — Nebiyu M.", url: config.linkedInNebiyu },
-                    { label: "LinkedIn — Eyob M.", url: config.linkedInEyob },
-                    { label: "LinkedIn — Abel T.", url: config.linkedInAbel },
-                  ].filter(l => l.url).map(link => (
-                    <a 
-                      key={link.label} 
-                      href={link.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between py-2.5 border-b border-[#1a2030] text-xs text-[#8b92a9] hover:text-[#4f8ef7] transition-colors"
-                    >
-                      <span>{link.label}</span> 
-                      <ExternalLink size={12} className="shrink-0 ml-2" />
-                    </a>
-                  ))}
+
+                {/* Social Media */}
+                <div className="grid grid-cols-2 gap-3">
+                  <a
+                    href="https://www.instagram.com/betterdoseltd"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3 rounded-xl border border-[#252d3d] bg-[#0f1117] hover:border-[#e1306c]/40 hover:bg-[#e1306c]/5 transition-all group"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#833ab4] via-[#fd1d1d] to-[#fcb045] flex items-center justify-center shrink-0">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5"/>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] text-[#556080] uppercase tracking-wider font-semibold">Instagram</p>
+                      <p className="text-xs text-[#e8eaf2] font-medium truncate group-hover:text-[#e1306c] transition-colors">@betterdoseltd</p>
+                    </div>
+                  </a>
+                  <a
+                    href="https://t.me/betterdose"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3 rounded-xl border border-[#252d3d] bg-[#0f1117] hover:border-[#229ED9]/40 hover:bg-[#229ED9]/5 transition-all group"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-[#229ED9] flex items-center justify-center shrink-0">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.667l-2.95-.924c-.64-.203-.653-.64.136-.954l11.566-4.458c.537-.194 1.006.131.054.89z"/>
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] text-[#556080] uppercase tracking-wider font-semibold">Telegram</p>
+                      <p className="text-xs text-[#e8eaf2] font-medium truncate group-hover:text-[#229ED9] transition-colors">@betterdose</p>
+                    </div>
+                  </a>
+                </div>
+
+                <div className="border-t border-[#1a2030] pt-3">
+                  <p className="text-[10px] text-[#556080] uppercase tracking-wider font-semibold mb-2">Team Developer Profiles</p>
+                  <div className="flex flex-col gap-1">
+                    {[
+                      { label: "GitHub — Nebiyu M.", url: config.githubNebiyu },
+                      { label: "GitHub — Eyob M.", url: config.githubEyob },
+                      { label: "GitHub — Abel T.", url: config.githubAbel },
+                      { label: "LinkedIn — Nebiyu M.", url: config.linkedInNebiyu },
+                      { label: "LinkedIn — Eyob M.", url: config.linkedInEyob },
+                      { label: "LinkedIn — Abel T.", url: config.linkedInAbel },
+                    ].filter(l => l.url).map(link => (
+                      <a 
+                        key={link.label} 
+                        href={link.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between py-2.5 border-b border-[#1a2030] text-xs text-[#8b92a9] hover:text-[#4f8ef7] transition-colors"
+                      >
+                        <span>{link.label}</span> 
+                        <ExternalLink size={12} className="shrink-0 ml-2" />
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

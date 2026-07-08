@@ -82,6 +82,20 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden lg:flex items-center gap-2 shrink-0">
+          {/* Social icons */}
+          <a href="https://www.instagram.com/betterdoseltd" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-[#556080] hover:text-[#e1306c] hover:bg-[#e1306c]/10 transition-all">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="https://t.me/betterdose" target="_blank" rel="noopener noreferrer" aria-label="Telegram"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-[#556080] hover:text-[#229ED9] hover:bg-[#229ED9]/10 transition-all">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.667l-2.95-.924c-.64-.203-.653-.64.136-.954l11.566-4.458c.537-.194 1.006.131.054.89z"/>
+            </svg>
+          </a>
+          <div className="w-px h-4 bg-[#252d3d] mx-1" />
           <Link href="/admin" className="btn btn-ghost text-xs py-1.5 px-3.5 border-transparent">
             Access Portal
           </Link>
@@ -130,18 +144,29 @@ export default function Navbar() {
                 );
               })}
               <div className="pt-3 mt-2 border-t border-[#252d3d] flex flex-col gap-2">
-                <Link
-                  href="/admin"
-                  className="btn btn-ghost w-full justify-center text-sm"
-                >
+                <Link href="/admin" className="btn btn-ghost w-full justify-center text-sm">
                   Access Portal
                 </Link>
-                <Link
-                  href="/contact"
-                  className="btn btn-primary w-full justify-center text-sm"
-                >
+                <Link href="/contact" className="btn btn-primary w-full justify-center text-sm">
                   Contact
                 </Link>
+                <div className="flex items-center justify-center gap-3 pt-2">
+                  <a href="https://www.instagram.com/betterdoseltd" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs text-[#556080] hover:text-[#e1306c] transition-colors">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                    </svg>
+                    @betterdoseltd
+                  </a>
+                  <span className="text-[#252d3d]">·</span>
+                  <a href="https://t.me/betterdose" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs text-[#556080] hover:text-[#229ED9] transition-colors">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.667l-2.95-.924c-.64-.203-.653-.64.136-.954l11.566-4.458c.537-.194 1.006.131.054.89z"/>
+                    </svg>
+                    @betterdose
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>

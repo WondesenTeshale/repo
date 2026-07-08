@@ -48,6 +48,38 @@ export default function Footer() {
                 {config.email}
               </div>
             </div>
+
+            {/* Social Links */}
+            <div className="flex items-center gap-3 mt-5">
+              <a
+                href="https://www.instagram.com/betterdoseltd"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="BetterDose on Instagram"
+                className="group w-8 h-8 rounded-lg bg-[#1f2433] border border-[#252d3d] flex items-center justify-center text-[#556080] hover:border-[#e1306c]/40 hover:text-[#e1306c] transition-all"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+              </a>
+              <a
+                href="https://t.me/betterdose"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="BetterDose on Telegram"
+                className="group w-8 h-8 rounded-lg bg-[#1f2433] border border-[#252d3d] flex items-center justify-center text-[#556080] hover:border-[#229ED9]/40 hover:text-[#229ED9] transition-all"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.667l-2.95-.924c-.64-.203-.653-.64.136-.954l11.566-4.458c.537-.194 1.006.131.054.89z"/>
+                </svg>
+              </a>
+              <div className="flex flex-col ml-1">
+                <span className="text-[9px] uppercase tracking-widest text-[#3a4454] font-semibold">Follow Us</span>
+                <span className="text-[10px] text-[#556080]">@betterdoseltd · @betterdose</span>
+              </div>
+            </div>
           </div>
 
           {/* Column 2: Pages */}
@@ -135,6 +167,17 @@ export default function Footer() {
           <p>
             © {year} {config.businessName}. Owner / Director: {config.ownerName}.
           </p>
+          <div className="flex items-center gap-3">
+            <a href="https://www.instagram.com/betterdoseltd" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#e1306c] transition-colors">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              @betterdoseltd
+            </a>
+            <span className="opacity-30">·</span>
+            <a href="https://t.me/betterdose" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#229ED9] transition-colors">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.667l-2.95-.924c-.64-.203-.653-.64.136-.954l11.566-4.458c.537-.194 1.006.131.054.89z"/></svg>
+              @betterdose
+            </a>
+          </div>
           <p>
             Registered in the United Kingdom · Operations in {config.address}.
           </p>
