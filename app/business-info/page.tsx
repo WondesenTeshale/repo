@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Building2, Briefcase, FileText, CreditCard } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { fetchConfig, BusinessConfig, INITIAL_CONFIG } from "@/lib/db";
+import { fetchConfig, BusinessConfig, INITIAL_CONFIG, LOCKED_IDENTITY } from "@/lib/db";
 
 export default function BusinessInfoPage() {
   const [config, setConfig] = useState<BusinessConfig>(INITIAL_CONFIG);
@@ -49,9 +49,10 @@ export default function BusinessInfoPage() {
                     { label: "Business Name", value: config.businessName },
                     { label: "Operating Name", value: config.businessName },
                     { label: "Owner / Director", value: config.ownerName },
+                    { label: "UK Registration No.", value: LOCKED_IDENTITY.ukRegistryNumber },
                     { label: "Industry", value: "Software Development & Digital Services" },
                     { label: "Country of Registration", value: "United Kingdom" },
-                    { label: "Operating Team Location", value: config.address },
+                    { label: "Registered Office", value: config.address },
                     { label: "Contact Email", value: config.email },
                     { label: "Contact Phone (Primary)", value: config.phone },
                     ...(config.phone2 ? [{ label: "Contact Phone (Secondary)", value: config.phone2 }] : []),

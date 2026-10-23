@@ -7,8 +7,8 @@ import { HASHED_USER, HASHED_PASS } from "@/lib/db";
 export const LOCKED_IDENTITY = {
   businessName: "BetterDose",
   ownerName: "Nebiyu Muluadam",
-  ukRegistryNumber: "12345678",
-  address: "Addis Ababa, Ethiopia",
+  ukRegistryNumber: "17519781",
+  address: "Office 20316, 182-184 High Street North, East Ham, London E6 2JA / Addis Ababa, Ethiopia",
 };
 
 function checkAuth(req: NextRequest): boolean {

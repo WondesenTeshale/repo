@@ -6,8 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 export const LOCKED_IDENTITY = {
   businessName: "BetterDose",
   ownerName: "Nebiyu Muluadam",
-  ukRegistryNumber: "16119809",
-  address: "Office 10954, 182-184 High Street North, East Ham, London E6 2JA / Addis Ababa, Ethiopia",
+  ukRegistryNumber: "17519781",
+  address: "Office 20316, 182-184 High Street North, East Ham, London E6 2JA / Addis Ababa, Ethiopia",
 };
 
 // SHA-256 admin credentials
